@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PMB Section</title>
+
+ 
+<style>
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        nav {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 28px 24px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            transform: translateX(-50%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            color: #00f2fe;
+        }
+
+        .nav-link:hover::before {
+            width: 70%;
+        }
+
+        .dropdown-toggle::after {
+            content: '▼';
+            font-size: 9px;
+            margin-left: 6px;
+            opacity: 0.7;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(20, 20, 20, 0.98);
+            backdrop-filter: blur(20px);
+            min-width: 240px;
+            list-style: none;
+            padding: 12px 0;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item:hover > .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            position: relative;
+        }
+
+        .dropdown-link {
+            display: block;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .dropdown-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 0%;
+            width: 3px;
+            background: linear-gradient(180deg, #00f2fe, #4facfe);
+            transition: height 0.3s ease;
+        }
+
+        .dropdown-link:hover {
+            background: rgba(0, 242, 254, 0.05);
+            color: #00f2fe;
+            padding-left: 32px;
+        }
+
+        .dropdown-link:hover::before {
+            height: 60%;
+        }
+
+        .dropdown-item .dropdown-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-item .dropdown-toggle::after {
+            content: '›';
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover > .dropdown-toggle::after {
+            transform: translateX(4px);
+        }
+
+        .dropdown-menu .dropdown-menu {
+            left: 100%;
+            top: -12px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape1 {
+            width: 500px;
+            height: 500px;
+            background: #00f2fe;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 400px;
+            height: 400px;
+            background: #4facfe;
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -7s;
+        }
+
+        .shape3 {
+            width: 300px;
+            height: 300px;
+            background: #00d4ff;
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: #00f2fe;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 28px;
+            background: linear-gradient(135deg, #ffffff 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 48px;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.8s backwards;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #0a0a0a;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: #00f2fe;
+            background: rgba(0, 242, 254, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 8px;
+            background: #00f2fe;
+            border-radius: 2px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scrollDot {
+            0% { top: 8px; opacity: 1; }
+            100% { top: 24px; opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .hero-description {
+                font-size: 18px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+.mobile-toggle{
+display:none;
+font-size:32px;
+cursor:pointer;
+color:#fff;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.75);
+backdrop-filter:blur(10px);
+z-index:5000;
+}
+
+.modal-content{
+width:90%;
+max-width:420px;
+padding:30px;
+border-radius:20px;
+background:#121212;
+border:1px solid rgba(255,255,255,.1);
+display:flex;
+flex-direction:column;
+gap:15px;
+position:relative;
+}
+#step1, #step2 {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+	#step3 {
+    display:none;
+    flex-direction:column;
+    gap:15px;
+}
+.modal-content h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.modal-content input,
+.modal-content select{
+padding:14px;
+border:none;
+border-radius:10px;
+background:#1f1f1f;
+color:white;
+}
+
+.modal.active {
+    display: flex;
+}
+	#reservationInfo{
+    background:#1f1f1f;
+    padding:15px;
+    border-radius:10px;
+    color:white;
+}
+
+#idNotice{
+    color:#ccc;
+    text-align:center;
+}
+.close-modal{
+position:absolute;
+top:10px;
+right:15px;
+font-size:30px;
+cursor:pointer;
+}
+
+@media(max-width:768px){
+
+.mobile-toggle{
+display:block;
+}
+
+.nav-container{
+padding:0 20px;
+}
+
+.nav-menu{
+position:absolute;
+top:100%;
+left:0;
+width:100%;
+background:#111;
+display:none;
+flex-direction:column;
+gap:0;
+}
+
+.nav-menu.active{
+display:flex;
+}
+
+.nav-link{
+padding:18px;
+}
+
+.hero-title{
+font-size:38px;
+}
+
+.hero-description{
+font-size:16px;
+}
+
+}
+#pmbBanner {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f1f1f;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+#pmbBanner button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}	
+	.side-panel{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:380px;
+    max-width:92%;
+    height:100vh;
+
+    background:rgba(10,10,10,.97);
+    backdrop-filter:blur(20px);
+
+    border-left:1px solid rgba(255,255,255,.1);
+
+    transition:right .35s ease;
+
+    z-index:99999;
+}
+
+.side-panel.active{
+    right:0;
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px;
+
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.panel-header h2{
+    margin:0;
+    color:#00f2fe;
+}
+
+.panel-header button{
+    background:none;
+    border:none;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.panel-content{
+    padding:20px;
+    line-height:1.8;
+
+    color:rgba(255,255,255,.65);
+
+    transition:all .35s ease;
+}
+
+/* Paragraphs */
+.panel-content p{
+    color:rgba(255,255,255,.60);
+
+    transition:
+        color .35s ease,
+        text-shadow .35s ease,
+        transform .35s ease;
+
+    cursor:default;
+}
+
+/* Desktop hover */
+.panel-content p:hover{
+    color:rgba(255,255,255,.98);
+
+    text-shadow:
+        0 0 8px rgba(0,242,254,.45),
+        0 0 16px rgba(0,242,254,.20);
+
+    transform:translateX(4px);
+
+    animation:textPulse 1.5s ease infinite;
+}
+
+/* Mobile tap / text selection */
+.panel-content p:active{
+    color:#fff;
+
+    text-shadow:
+        0 0 10px rgba(0,242,254,.6);
+
+    transform:translateX(4px);
+}
+
+@keyframes textPulse{
+
+    0%,100%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:.8;
+    }
+}
+	.panel-content h3{
+    color:#00f2fe;
+
+    margin-top:20px;
+    margin-bottom:10px;
+
+    transition:all .35s ease;
+}
+
+.panel-content h3:hover{
+    text-shadow:
+        0 0 10px rgba(0,242,254,.7),
+        0 0 20px rgba(0,242,254,.3);
+
+    letter-spacing:.5px;
+}
+	.side-panel.active .panel-content{
+    animation:panelReveal .6s ease;
+}
+
+@keyframes panelReveal{
+
+    from{
+        opacity:0;
+        transform:translateX(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+	.site-footer{
+    text-align:center;
+    padding:20px 15px;
+    background:rgba(0,0,0,0.15);
+    backdrop-filter:blur(10px);
+}
+
+.hero-description-small{
+    font-size:10px;
+    color:rgba(255,255,255,0.5);
+    line-height:1.5;
+    margin:0;
+    opacity:.55;
+    animation: footerGlow 8s infinite;
+}
+
+@keyframes footerGlow{
+    0%,90%,100%{
+        opacity:.45;
+    }
+
+    94%{
+        opacity:.9;
+        text-shadow:
+            0 0 6px rgba(0,242,254,.35),
+            0 0 12px rgba(0,242,254,.15);
+    }
+}
+	.vip-card{
+
+    padding:18px;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,215,0,.10),
+            rgba(255,180,0,.04)
+        );
+
+    border:1px solid rgba(255,215,0,.35);
+
+    box-shadow:
+        0 0 20px rgba(255,215,0,.10);
+
+    margin-bottom:18px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.vip-card::before{
+
+    content:'VIP';
+
+    position:absolute;
+
+    top:10px;
+    right:12px;
+
+    font-size:10px;
+    letter-spacing:2px;
+
+    color:rgba(255,215,0,.7);
+}
+
+.vip-card h3{
+
+    color:#ffd700;
+
+    text-shadow:
+        0 0 8px rgba(255,215,0,.35);
+
+    margin-top:0;
+}
+
+.vip-card:hover{
+
+    box-shadow:
+        0 0 25px rgba(255,215,0,.18),
+        0 0 40px rgba(255,215,0,.08);
+
+    transform:translateY(-2px);
+
+    transition:all .35s ease;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+</head>
+
+<body translate="no"><div id="pmbBanner" style="display:none;">
+    <span>📬 You have an active PMB reservation</span>
+
+    <button onclick="openActiveReservation()">
+        Open
+    </button>
+
+    <button onclick="closeBanner()">
+        ✖
+    </button>
+</div>
+  <nav id="navbar">
+        <div class="nav-container">
+			<div class="mobile-toggle" id="mobileToggle">
+☰
+</div>
+            <div class="logo">PMB☆USA</div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+                    
+              <li class="nav-item">
+    <a href="#" class="nav-link" onclick="openPanel('office')">Rent Office</a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" onclick="openPanel('pricing')">Pricing</a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" onclick="openPanel('contacts')">Contacts</a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link dropdown-toggle">Private Mail Box</a>
+
+    <ul class="dropdown-menu">
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('mailbox')">
+               Mailbox Rental
+            </a>
+        </li>
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('virtual')">
+               Virtual Office
+            </a>
+        </li>
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('vip')">
+               VIP Mailbox Rental
+            </a>
+        </li>
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('businessmail')">
+               Manage Business Mail
+            </a>
+        </li>
+
+    </ul>
+</li>
+				
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-grid"></div>
+            <div class="floating-shapes">
+                <div class="shape shape1"></div>
+                <div class="shape shape2"></div>
+                <div class="shape shape3"></div>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-subtitle">Establish Your Business Presence with a Real U.S. Street Address.</div>
+            <h1 class="hero-title">Mailbox Rental You Can Access Anytime</h1>
+            <p class="hero-description">
+                Real Street Addresses, Mail and Package Forwarding, Free Unlimited Online Storage.
+				Securely Access Your Virtual Mailbox.
+            </p>
+         <div class="hero-buttons">
+
+    <a href="#" class="btn btn-primary" id="signupBtn">
+        Start
+    </a>
+
+    <button class="btn btn-primary" id="loginBtn">
+        Login
+    </button>
+
+</div>
+        </div>
+
+        <div class="scroll-indicator"></div>
+    </section>
+<footer class="site-footer"><p class="hero-description-small">
+PMB-USA is a secure mailbox rental service, where individuals and businesses can receive mail and packages.
+Oue PMBs provides a real street address, which can be beneficial for receiving packages from all carriers (USPS, UPS, FedEx, etc.) and is often required for business registrations.
+Package Acceptance: PMBs can accept packages from all carriers, including UPS, FedEx,USPS with extra services such as package receiving and holding, mail forwarding.
+Flexibility and Access: Our location have extended hours, including weekends, offering more flexibility for access.
+Privacy and Professionalism: With an actual street address, which can enhance the professional image of a business. We also offering more privacy with VIP plan.
+Our PMBs provide more flexibility, services, and a real street address with secure mail receiving options, making them a versatile choice for both individuals and businesses.</p></footer>
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+
+    <div class="modal-content">
+
+        <span class="close-modal">&times;</span>
+
+        <h2>Mailbox Login</h2>
+
+        <input type="text" placeholder="Mailbox Number">
+        <input type="password" placeholder="Password">
+
+        <button class="btn btn-primary" id="loginSubmitBtn">
+            Login
+        </button>
+
+    </div>
+
+</div>
+<div class="modal" id="signupModal">
+    <div class="modal-content">
+
+       <div id="step1">
+    <h2>Open New Mailbox</h2>
+
+    <input id="su_name" type="text" placeholder="Full Name">
+    <input id="su_email" type="email" placeholder="Email">
+    <input id="su_password" type="password" placeholder="Create Password">
+
+    <select id="su_type">
+        <option value="PERSONAL">Personal Mailbox</option>
+        <option value="BUSINESS">Business Mailbox</option>
+        <option value="VIP">VIP Mailbox</option>
+    </select>
+
+    <select id="su_term">
+        <option value="6">6 Months</option>
+        <option value="12">12 Months</option>
+        <option value="24">24 Months</option>
+    </select>
+<div id="pricePreview" style="
+margin-top:10px;
+padding:10px;
+border-radius:8px;
+background:rgba(255,255,255,.08);
+font-size:14px;
+text-align:center;
+">
+Loading price...
+</div>
+            <button onclick="pmbGoStep2()" class="btn btn-primary">
+                Continue
+            </button>
+        </div>
+
+        <div id="step2" style="display:none;">
+            <h2>Choose Payment Method</h2>
+
+            <button onclick="selectPayment('card')">💳 Card</button>
+<button onclick="selectPayment('crypto')">₿ Crypto</button>
+<button onclick="selectPayment('cash')">🏢 Cash</button>
+
+            <hr>
+
+            <button onclick="pmbBackStep1()">Back</button>
+        </div>
+<div id="step3" style="display:none;">
+    <h2>Mailbox Reserved</h2>
+
+    <div id="reservationInfo"></div>
+
+    <p id="idNotice"></p>
+
+    <button onclick="closeSignupModal()">
+        Close
+    </button>
+</div>
+    </div>
+	
+</div>
+<div id="infoPanel" class="side-panel">
+
+    <div class="panel-header">
+
+        <h2 id="panelTitle">Info</h2>
+
+        <button onclick="closePanel()">✕</button>
+
+    </div>
+
+    <div id="panelContent" class="panel-content"></div>
+
+</div>
+	
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+let pmbSignupTemp = {};
+function getMailboxRate(type){
+
+    if(type === "PERSONAL") return 14.99;
+
+    if(type === "BUSINESS") return 24.99;
+
+    if(type === "VIP") return 49.99;
+
+    return 0;
+}
+	
+function updatePricePreview() {
+
+    const type =
+        document.getElementById("su_type").value;
+
+    const term =
+        parseInt(
+            document.getElementById("su_term").value
+        );
+
+    let monthly = 0;
+
+    if (type === "PERSONAL")
+        monthly = 14.99;
+
+    if (type === "BUSINESS")
+        monthly = 24.99;
+
+    if (type === "VIP")
+        monthly = 49.99;
+
+    const total =
+        (monthly * term).toFixed(2);
+
+    document.getElementById("pricePreview").innerHTML = `
+        <b>${type}</b><br>
+        ${term} Months<br>
+        Monthly: $${monthly}<br>
+        <span style="font-size:18px;color:#4cff88">
+            Total: $${total}
+        </span>
+    `;
+}	
+function pmbGoStep2() {    
+
+    pmbSignupTemp = {
+    name: document.getElementById("su_name").value,
+    email: document.getElementById("su_email").value,
+    password: document.getElementById("su_password").value,
+
+    mailbox_type: document.getElementById("su_type").value,
+
+    mailbox_term: parseInt(
+        document.getElementById("su_term").value || "0"
+    )
+};
+
+    if (!pmbSignupTemp.name || !pmbSignupTemp.email || !pmbSignupTemp.password) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "flex";
+
+    console.log("STEP 2 OPENED");
+}
+
+function pmbBackStep1() {
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step1").style.display = "flex";
+}
+
+let countdownInterval;
+
+function startCountdown(expiryTime) {
+
+    clearInterval(countdownInterval);
+
+    countdownInterval = setInterval(() => {
+
+        const now = Date.now();
+        const diff = expiryTime - now;
+
+        const notice = document.getElementById("idNotice");
+        if (!notice) return;
+
+        if (diff <= 0) {
+            clearInterval(countdownInterval);
+            notice.innerHTML = "❌ Reservation expired. Please restart.";
+            return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        notice.innerHTML =
+            `⏳ Time left: ${hours}h ${minutes}m ${seconds}s`;
+
+    }, 1000);
+}
+function showStep(step) {
+
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "none";
+
+    document.getElementById(step).style.display = "flex";
+}
+
+function renderReservation(reservation) {
+
+    const box = document.getElementById("reservationInfo");
+    const notice = document.getElementById("idNotice");
+
+    if (box) {
+        box.innerHTML = `
+            <b>PMB:</b> ${reservation.pmb_number}<br>
+            <b>Name:</b> ${reservation.customer_name}<br>
+            <b>Email:</b> ${reservation.email}<br>
+            <b>Type:</b> ${reservation.mailbox_type}<br>
+            <b>Term:</b> ${reservation.mailbox_term} Months<br>
+            <b>Expires:</b> ${new Date(reservation.expires_at).toLocaleString()}<br>
+        `;
+    }
+
+    if (notice) {
+        notice.innerHTML =
+            reservation.payment_method === "cash"
+                ? "🏢 Bring ID to office"
+                : "⚠️ Pay within 24 hours + ID required";
+    }
+}
+
+async function selectPayment(method) {
+
+    pmbSignupTemp.payment_method = method;
+
+    // 1. FIND FIRST FREE MAILBOX
+    const { data: freeBox, error: fetchError } = await window.sb
+        .from("mailboxes")
+        .select("*")
+        .eq("occupancy", "FREE")
+        .eq("account_status", "AVAILABLE")
+        .order("pmb_number", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+    if (fetchError) {
+        console.error(fetchError);
+        alert("Error loading mailbox");
+        return;
+    }
+
+    if (!freeBox) {
+        alert("No free mailboxes available");
+        return;
+    }
+
+    // 2. RESERVE MAILBOX
+    const expiresAt = Date.now() + (24 * 60 * 60 * 1000);
+
+    const { error: updateError } = await window.sb
+        .from("mailboxes")
+        .update({
+    customer_name:
+        pmbSignupTemp.name,
+
+    customer_email:
+        pmbSignupTemp.email,
+
+    login_password:
+        pmbSignupTemp.password,
+
+    mailbox_type:
+        pmbSignupTemp.mailbox_type,
+
+    mailbox_term:
+        pmbSignupTemp.mailbox_term,
+
+    monthly_rate:
+        getMailboxRate(
+            pmbSignupTemp.mailbox_type
+        ),
+
+            occupancy: "OCCUPIED",
+            account_status: "RESERVED",
+
+            admin_notes:
+                method === "cash"
+                    ? "Cash payment - awaiting office visit"
+                    : "Online payment - awaiting payment",
+
+            paid_until: new Date(expiresAt).toISOString()
+        })
+        .eq("id", freeBox.id);
+
+    if (updateError) {
+        console.error(updateError);
+        alert("Failed to reserve mailbox");
+        return;
+    }
+
+    // 3. BUILD RESERVATION OBJECT
+    const reservation = {
+        pmb_number: freeBox.pmb_number,
+        customer_name: pmbSignupTemp.name,
+        email: pmbSignupTemp.email,
+        mailbox_type: pmbSignupTemp.mailbox_type,
+        mailbox_term: pmbSignupTemp.mailbox_term,
+        payment_method: method,
+        account_status: "RESERVED",
+        expires_at: expiresAt
+    };
+
+    console.log("RESERVED MAILBOX:", reservation);
+
+    localStorage.setItem("pmb_reservation", JSON.stringify(reservation));
+
+    // 4. SHOW STEP 3
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "flex";
+
+    document.getElementById("reservationInfo").innerHTML = `
+        <b>PMB:</b> ${reservation.pmb_number}<br>
+        <b>Name:</b> ${reservation.customer_name}<br>
+        <b>Email:</b> ${reservation.email}<br>
+        <b>Type:</b> ${reservation.mailbox_type}<br>
+        <b>Term:</b> ${reservation.mailbox_term} Months<br>
+        <b>Status:</b> ${reservation.account_status}<br>
+        <b>Payment:</b> ${reservation.payment_method}
+    `;
+
+    document.getElementById("idNotice").innerHTML =
+        method === "cash"
+            ? "🏢 Bring ID to office"
+            : "⚠️ Complete payment within 24 hours + ID required";
+
+    startCountdown(reservation.expires_at);
+
+    alert("MAILBOX RESERVED: " + reservation.pmb_number);
+}
+	function closeSignupModal() {
+    document.getElementById("signupModal").classList.remove("active");
+}
+	window.onload = function () {
+
+    const saved = localStorage.getItem("pmb_reservation");
+
+    if (!saved) return;
+
+    const reservation = JSON.parse(saved);
+
+    const now = Date.now();
+
+    // ❌ expired cleanup
+    if (reservation.expires_at && now > reservation.expires_at) {
+        localStorage.removeItem("pmb_reservation");
+        return;
+    }
+
+    // ✅ store in memory
+    window.activeReservation = reservation;
+
+    // show banner instead of modal
+    document.getElementById("pmbBanner").style.display = "flex";
+};
+	function openActiveReservation() {
+
+    const reservation = window.activeReservation;
+    if (!reservation) return;
+
+    document.getElementById("signupModal").classList.add("active");
+
+    showStep("step3");
+    renderReservation(reservation);
+
+    closeBanner();
+}
+
+function closeBanner() {
+    document.getElementById("pmbBanner").style.display = "none";
+}
+	document.addEventListener("DOMContentLoaded", () => {
+
+    const type =
+        document.getElementById("su_type");
+
+    const term =
+        document.getElementById("su_term");
+
+    if(type && term){
+
+        type.addEventListener(
+            "change",
+            updatePricePreview
+        );
+
+        term.addEventListener(
+            "change",
+            updatePricePreview
+        );
+
+        updatePricePreview();
+    }
+
+});
+</script>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+
+    // -------------------------
+    // SUPABASE INIT (FIXED)
+    // -------------------------
+    const supabaseUrl = "https://kogawaehnkegmtnyiwzu.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvZ2F3YWVobmtlZ210bnlpd3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjIyNDUsImV4cCI6MjA5NjIzODI0NX0.TZkcaatq1FVeRPvhWUqE2td4iwTFVHxjktpsL6MhK8E";
+
+    window.supabaseClient = window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
+window.sb = window.supabaseClient;
+    console.log("SUPABASE READY:", window.supabaseClient);
+
+    // -------------------------
+    // MOBILE MENU
+    // -------------------------
+    const mobileToggle = document.getElementById("mobileToggle");
+    const navMenu = document.querySelector(".nav-menu");
+
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+			
+			async function cleanupExpiredMailboxes() {
+
+    const now = new Date().toISOString();
+
+    const { data, error } = await window.sb
+        .from("mailboxes")
+        .select("id, paid_until")
+        .eq("occupancy", "OCCUPIED")
+        .eq("account_status", "RESERVED");
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    for (const box of data) {
+
+        if (!box.paid_until) continue;
+
+        if (new Date(box.paid_until) < new Date(now)) {
+
+            await window.sb
+                .from("mailboxes")
+                .update({
+                    customer_name: null,
+                    customer_email: null,
+                    login_password: null,
+                    occupancy: "FREE",
+                    account_status: "AVAILABLE",
+                    paid_until: null,
+				status_history: [
+    {
+        status: "RESERVED",
+        time: new Date().toISOString()
+    }
+],
+                    admin_notes: "Auto-expired after 24h"
+				
+                })
+                .eq("id", box.id);
+        }
+    }
+
+    console.log("EXPIRY CLEANUP DONE");
+}
+			cleanupExpiredMailboxes();
+        });
+    }
+
+    // -------------------------
+    // LOGIN POPUP
+    // -------------------------
+
+    console.log("DOM READY");
+
+    const loginBtn = document.getElementById("loginBtn");
+    const loginModal = document.getElementById("loginModal");
+    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+
+    console.log("loginBtn:", loginBtn);
+    console.log("loginSubmitBtn:", loginSubmitBtn);
+
+    // OPEN MODAL
+    loginBtn?.addEventListener("click", () => {
+        console.log("OPEN MODAL CLICK");
+        loginModal?.classList.add("active");
+    });
+
+    // LOGIN ACTION
+    loginSubmitBtn?.addEventListener("click", () => {
+        console.log("LOGIN SUBMIT CLICK");
+        loginMailbox();
+    });
+
+    // -------------------------
+    // SIGNUP POPUP
+    // -------------------------
+    const signupBtn = document.getElementById("signupBtn");
+    const signupModal = document.getElementById("signupModal");
+
+    if (signupBtn && signupModal) {
+        signupBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            signupModal.classList.add("active");
+        });
+    }
+
+    // -------------------------
+    // LOGIN FUNCTION
+    // -------------------------
+    window.loginMailbox = async function () {
+
+        try {
+
+            console.log("LOGIN STARTED");
+
+            const mailbox = document
+                .querySelector("#loginModal input[type='text']")
+                .value
+                .trim()
+                .toUpperCase();
+
+            const password = document
+                .querySelector("#loginModal input[type='password']")
+                .value
+                .trim();
+
+            console.log("INPUT:", mailbox, password);
+const { data: testRows, error: testError } = await window.supabaseClient
+    .from('mailboxes')
+    .select('pmb_number, login_password')
+    .limit(10);
+
+console.log("TEST ROWS:", testRows);
+console.log("TEST ERROR:", testError);
+            const { data, error } = await window.supabaseClient
+                .from('mailboxes')
+                .select('*')
+                .eq('pmb_number', mailbox)
+                .eq('login_password', password)
+                .maybeSingle();
+
+            console.log("LOGIN RESULT:", data, error);
+
+            if (error) {
+                alert(error.message);
+                return;
+            }
+
+            if (!data) {
+                alert("Invalid mailbox or password");
+                return;
+            }
+
+            localStorage.setItem("pmb_user", JSON.stringify(data));
+
+            console.log("STORED USER:", data);
+
+            window.location.href = "dashboard.html";
+
+        } catch (err) {
+            console.error("LOGIN ERROR:", err);
+            alert(err.message || "Login crashed");
+        }
+    };
+
+    // -------------------------
+    // CLOSE MODALS
+    // -------------------------
+    document.querySelectorAll(".close-modal")
+        .forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".modal")
+                    .forEach(m => m.classList.remove("active"));
+            });
+        });
+
+});
+	</script>	
+
+<script>
+	document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
+
+    toggle.addEventListener("click", (e) => {
+
+        if (window.innerWidth > 768) return;
+
+        e.preventDefault();
+
+        const item = toggle.closest(".nav-item");
+
+        item?.classList.toggle("open");
+    });
+
+});
+	</script>
+	<script>
+	function closePanel(){
+    document
+        .getElementById("infoPanel")
+        .classList.remove("active");
+}
+
+function openPanel(type){
+
+    const title = document.getElementById("panelTitle");
+    const content = document.getElementById("panelContent");
+
+    switch(type){
+
+        case "office":
+
+                title.innerText = "Office Rental";
+
+    content.innerHTML = `
+        <h3>Private Office Space</h3>
+
+        <p>
+            Fully furnished office solutions for individuals,
+            startups and established businesses.
+        </p>
+
+        <p>
+            ✓ Professional business address<br>
+            ✓ High-speed internet<br>
+            ✓ Mail handling services<br>
+            ✓ Flexible monthly terms
+        </p>
+
+        <p>
+            Contact us for current availability and pricing.
+        </p>
+    `;
+break;
+
+        case "pricing":
+
+            title.innerText = "Mailbox Pricing";
+
+    content.innerHTML = `
+        <h3>Current Plans</h3>
+
+        <p>
+            Personal Mailbox — from $14.99/mo
+        </p>
+
+        <p>
+            Business Mailbox — from $24.99/mo
+        </p>
+
+        <p>
+            VIP Mailbox — from $49.99/mo
+        </p>
+
+        <p>
+            Longer terms provide better overall value.
+        </p>
+    `;
+break;
+
+        case "contacts":
+
+            title.innerText = "Contacts";
+
+            content.innerHTML = `
+                Call (555) 123-4567
+            `;
+        break;
+
+        case "mailbox":
+
+            title.innerText = "Private Mailbox Rental";
+
+    content.innerHTML = `
+        <h3>Secure Mail Receiving</h3>
+
+        <p>
+            Receive personal or business mail at a real street address.
+        </p>
+
+        <p>
+            ✓ Personal Mailboxes<br>
+            ✓ Business Mailboxes<br>
+            ✓ VIP Mailbox Services
+        </p>
+
+        <p>
+            Plans available for 6, 12 and 24 months.
+        </p>
+    `;
+break;
+
+        case "virtual":
+
+            title.innerText = "Virtual Office";
+
+            content.innerHTML = `
+                Business address and mail handling.
+            `;
+        break;
+
+        case "vip":
+
+             title.innerText = "VIP Mailbox";
+
+    content.innerHTML = `
+
+        <div class="vip-card">
+
+            <h3>VIP Mailbox Service</h3>
+
+            <p>
+                Premium private mailbox solution for business owners,
+                executives and clients requiring enhanced service.
+            </p>
+
+            <p>
+                ★ Priority mail handling<br>
+                ★ Package notifications<br>
+                ★ Premium support<br>
+                ★ Extended storage options
+            </p>
+
+        </div>
+
+        <p>
+            VIP members receive priority processing and personalized
+            mailbox management services.
+        </p>
+
+    `;
+break;
+
+        case "businessmail":
+
+            content.innerHTML = `
+    <div style="
+        padding:15px;
+        border-radius:12px;
+        background:rgba(255,255,255,.05);
+        border:1px solid rgba(255,255,255,.08);
+    ">
+        <h3>Business Mailbox</h3>
+
+        <p>
+            Perfect for LLCs, corporations and remote businesses.
+        </p>
+    </div>
+`;
+    }
+
+    document
+        .getElementById("infoPanel")
+        .classList.add("active");
+}
+	</script>
+
+</body>
+
+</html>
