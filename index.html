@@ -46,16 +46,6 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00f2fe, #4facfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 0.5px;
-        }
-
         .nav-menu {
             list-style: none;
             display: flex;
@@ -295,6 +285,119 @@
             }
         }
 
+    .hero-logo{
+    position:absolute;
+    left:50%;
+    top:22px; 
+    transform:translateX(-50%);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    white-space:nowrap;	
+    font-size:30px;
+    font-weight:800;
+    line-height:1;
+    background:linear-gradient(
+        90deg,
+        #ffffff 0%,
+        #dffeff 20%,
+        #00f2fe 50%,
+        #b9fbff 80%,
+        #ffffff 100%
+    );
+
+    background-size:220% 100%;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    -webkit-text-stroke:0.9px #dffeff;
+    text-shadow:
+        0 0 1px rgba(255,255,255,.6),
+        0 0 6px rgba(0,242,254,.35);
+
+    animation:
+        fadeInUp 1s ease-out .4s backwards,
+        iceSweep 2s ease-in-out 1.2s 1 forwards;
+}
+
+@keyframes iceSweep{
+
+    0%{
+        background-position:0% 50%;
+        filter:brightness(1.25);
+    }
+
+    50%{
+        background-position:100% 50%;
+        filter:brightness(.78);
+    }
+
+    100%{
+        background-position:0% 50%;
+        filter:brightness(1);
+    }
+
+}
+
+/* ---------- LIVE DOT ---------- */
+.i-dot{
+
+    display:inline-block;
+
+    width:5px;
+    height:5px;
+
+    margin:0 5px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(circle at 35% 35%,
+            #ffffff 0%,
+            #dffeff 30%,
+            #7ffcff 60%,
+            #00d8ff 100%);
+
+    border:1px solid rgba(255,255,255,.9);
+
+    box-shadow:
+        0 0 2px #fff,
+        0 0 4px #bfffff,
+        0 0 8px #00f2fe,
+        0 0 12px #00f2fe;
+
+    animation:
+        idleDot 8s infinite;
+}
+	@keyframes idleDot{
+
+    /* sleeping */
+
+    0%,48%,100%{
+        transform:translateY(0);
+    }
+
+    /* wake */
+
+    52%{
+        transform:translateY(-2px);
+    }
+
+    56%{
+        transform:translateY(2px);
+    }
+
+    60%{
+        transform:translateY(-1px);
+    }
+
+    64%{
+        transform:translateY(0);
+    }
+}
         .hero-subtitle {
             font-size: 16px;
             color: #00f2fe;
@@ -367,7 +470,203 @@
             background: rgba(0, 242, 254, 0.1);
             transform: translateY(-3px);
         }
+/* ==========================
+   PMB LOGISTICS FOOTER
+========================== */
 
+#pmb-footer{
+    width:100%;
+    padding:0px 1px 0px;
+    background:#transparent;
+    border-top:1px solid #222;
+    overflow:hidden;
+    position:relative;
+}
+
+/* ==========================
+   PMB WALL
+========================== */
+#wallWrap{
+
+    width:100%;
+    overflow:hidden;
+}
+
+
+#pmbWall{
+
+    display:grid;
+
+    grid-template-columns:repeat(60,1fr);
+
+    gap:1px;
+
+    padding:1px 0;
+
+    width:100%;          /* design width */
+	height: 132px;
+
+}
+
+.pmb{
+
+    height:10px;
+
+    background:#1a1a1a;
+
+    color:#444;
+
+    font-size:6px;
+
+    font-family:Montserrat,sans-serif;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:1px;
+
+    transition:.25s;
+
+}
+
+.pmb.active{
+
+    background:#00f2fe;
+
+    color:#000;
+
+    box-shadow:
+        0 0 4px #00f2fe,
+        0 0 8px #00f2fe;
+
+}
+
+/* ==========================
+   SCANNER LINE
+========================== */
+
+#scanner{
+    position:absolute;
+
+    top:0;
+    left:0;
+   animation: scanMove 6s linear infinite;
+
+}
+	@keyframes scanMove{
+    0%   { transform: translate(0px, 0px); }
+    25%  { transform: translate(200px, 0px); }
+    50%  { transform: translate(400px, 0px); }
+    75%  { transform: translate(200px, 0px); }
+    100% { transform: translate(0px, 0px); }
+}
+	#scanLine{
+    position:relative;
+    width:1.1px;
+    height:101px;
+    border-radius:8px;
+
+    background:linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,60,60,.95),
+        transparent
+    );
+
+    box-shadow:
+        0 0 3px #ff2d2d,
+        0 0 8px rgba(255,40,40,.6),
+        0 0 18px rgba(255,40,40,.25);
+
+}
+
+/* red ball */
+
+#xtubeBall{
+    position:absolute;
+
+    left:50%;
+    top:-6px;
+
+    transform:translateX(-50%);
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+    background:#ff0000;
+
+    box-shadow:
+        0 0 4px #ff0000,
+        0 0 10px rgba(255,0,0,.8);
+}
+/* scanner trail */
+
+#xtubeBall::after{
+    content:"";
+    position:absolute;
+
+    left:50%;
+    top:-130px;
+
+    transform:translateX(-50%);
+
+    width:.2px;
+    height:130px;
+
+    background:linear-gradient(
+        to top,
+        rgba(255,0,0,.25),
+        transparent
+    );
+
+    filter:blur(.8px);
+    opacity:.18;
+}
+
+/* ==========================
+   STATUS
+========================== */
+
+#footerStatus{
+
+    text-align:center;
+
+    font:600 12px Montserrat,sans-serif;
+
+    color:#00f2fe;
+
+    letter-spacing:1px;
+
+    min-height:16px;
+
+    text-shadow:0 0 6px #00f2fe55;
+
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width:700px){
+
+    #pmbWall{
+
+        grid-template-columns:repeat(20,1fr);
+
+    }
+
+    .pmb{
+
+        font-size:6px;
+        height:16px;
+
+    }
+
+}
         .scroll-indicator {
             position: absolute;
             bottom: 40px;
@@ -795,12 +1094,237 @@ font-size:16px;
 
     transition:all .35s ease;
 }
+		.mailboxcity-sign{
+      position:absolute;
+
+    margin-top: 5px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    display:flex;
+    gap:2px;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+
+    height:16px;
+    line-height:16px;
+}
+
+
+.mailboxcity-sign span{
+
+    color:transparent;
+    -webkit-text-fill-color:#0a0b0c;
+
+    -webkit-text-stroke:0.9px #dffeff;
+
+    text-shadow:
+        0 0 1px #00f2fe,
+        0 0 2px #00f2fe,
+        0 0 4px #00f2fe,
+        0 0 8px #00f2fe,
+        0 0 16px #00f2fe,
+        0 0 32px rgba(0,242,254,.7);
+
+    animation:
+        neonColor 22s infinite,
+        tubeFlicker 8s infinite;
+}
+@keyframes neonColor{
+
+    0%,65%{
+
+        -webkit-text-stroke-color:#e3feff;
+
+        text-shadow:
+            0 0 1px #f3e2ff,
+            0 0 3px #f3e2ff,
+            0 0 6px #f3e2ff,
+            0 0 12px #f3e2ff,
+            0 0 24px rgba(168,85,255,.9);
+    }
+
+    70%,80%{
+
+        -webkit-text-stroke-color:#dfffff;
+
+        text-shadow:
+            0 0 1px #00f2fe,
+            0 0 3px #00f2fe,
+            0 0 6px #00f2fe,
+            0 0 12px #00f2fe,
+            0 0 24px rgba(0,242,254,.9);
+    }
+
+    84%,88%{
+
+        -webkit-text-stroke-color:#fff0d0;
+
+        text-shadow:
+            0 0 1px #FFD566,
+            0 0 3px #EBB866,
+            0 0 6px #E6BE8A,
+            0 0 12px #F5D760,
+            0 0 24px rgba(255,176,0,.9);
+    }
+
+    100%{
+
+        -webkit-text-stroke-color:#f3e2ff;
+
+        text-shadow:
+            0 0 1px #E6E6FA,
+            0 0 3px #D8BFD8,
+            0 0 6px #E6E6FA,
+            0 0 12px #D8BFD8,
+            0 0 24px rgba(168,85,255,.9);
+    }
+}
+	
+@keyframes tubeFlicker{
+
+    0%,90%,100%{
+        opacity:1;
+    }
+
+    91%{
+        opacity:.15;
+    }
+
+    92%{
+        opacity:1;
+    }
+
+    93%{
+        opacity:.35;
+    }
+
+    94%{
+        opacity:1;
+    }
+
+    95%{
+        opacity:.55;
+    }
+
+    96%{
+        opacity:1;
+    }
+}
+span:nth-child(1){animation-delay:.1s,2.7s;}
+span:nth-child(2){animation-delay:.4s,5.1s;}
+span:nth-child(3){animation-delay:.7s,1.6s;}
+span:nth-child(4){animation-delay:1s,4.2s;}
+span:nth-child(5){animation-delay:1.3s,6.3s;}
+span:nth-child(6){animation-delay:1.6s,3.4s;}
+span:nth-child(7){animation-delay:1.9s,5.8s;}
+span:nth-child(8){animation-delay:2.2s,2.1s;}
+span:nth-child(9){animation-delay:2.5s,4.7s;}
+span:nth-child(10){animation-delay:2.8s,1.3s;}
+span:nth-child(11){animation-delay:3.1s,6.8s;}
+
+.pmb-logo{
+    position:relative;
+top: 2;
+    width:210px;
+    height:76px;
+
+    margin:auto;
+}
+.one-o{
+
+    display:inline-block;
+    
+    background:linear-gradient(
+        90deg,
+        #b9fbff 0%,
+        #dffeff 20%,
+        #00f2fe 50%,
+        #b9fbff 80%,
+        #ffffff 100%
+    );
+
+    background-size:220% 100%;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    -webkit-text-stroke:0.9px #dffeff;
+    text-shadow:
+        0 0 1px rgba(255,255,255,.6),
+        0 0 6px rgba(0,242,254,.35);
+
+    animation:
+        fadeInUp 1s ease-out .4s backwards,
+        iceSweep 2s ease-in-out 1.2s 1 forwards,
+	    chargeO 8s infinite;
+}
+
+@keyframes iceSweep{
+
+    0%{
+        background-position:0% 50%;
+        filter:brightness(1.25);
+    }
+
+    50%{
+        background-position:100% 50%;
+        filter:brightness(.78);
+    }
+
+    100%{
+        background-position:0% 50%;
+        filter:brightness(1);
+    }
+
+}
+
+@keyframes chargeO{
+
+    0%,64%,100%{
+
+        filter:none;
+        transform:scale(1);
+
+    }
+
+    67%{
+		
+      67%{
+
+    -webkit-text-stroke-color:#e3feff;
+
+    text-shadow:
+        0 0 1px #f3e2ff,
+        0 0 2px #f3e2ff,
+        0 0 4px #9cfaff,
+        0 0 8px rgba(0,242,254,.45);
+
+    transform:scale(1.04);
+    }
+
+    72%{
+
+        transform:scale(1.1);
+color:#E6E6FA;
+        -webkit-text-stroke:.8px #violet;
+    }
+
+}
 </style>
 
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <script>
   window.console = window.console || function(t) {};
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
 </head>
 
 <body translate="no"><div id="pmbBanner" style="display:none;">
@@ -819,7 +1343,31 @@ font-size:16px;
 			<div class="mobile-toggle" id="mobileToggle">
 ☰
 </div>
-            <div class="logo">PMB☆USA</div>
+             <div class="logo pmb-logo">
+<div class="pmb-logo">
+
+    <div class="mailboxcity-sign">
+        <span>M</span>
+        <span>A</span>
+        <span>I</span>
+        <span>L</span>
+        <span>B</span>
+        <span>O</span>
+        <span>X</span>
+        <span>C</span>
+        <span>I</span>
+        <span>T</span>
+        <span>Y</span>
+    </div>
+
+		<div class="hero-logo">
+   
+    PMB<span class="i-dot"></span><span class="one-o">ONE</span>
+</div>
+
+</div>
+					 					 
+</div>
             <ul class="nav-menu">
                 <li class="nav-item">
                     <a href="#" class="nav-link">Home</a>
@@ -891,7 +1439,7 @@ font-size:16px;
             <div class="hero-subtitle">Establish Your Business Presence with a Real U.S. Street Address.</div>
             <h1 class="hero-title">Mailbox Rental You Can Access Anytime</h1>
             <p class="hero-description">
-                Real Street Addresses, Mail and Package Forwarding, Free Unlimited Online Storage.
+                Real Street Address, Mail and Package Forwarding, Free Unlimited Online Storage.
 				Securely Access Your Virtual Mailbox.
             </p>
          <div class="hero-buttons">
@@ -910,12 +1458,28 @@ font-size:16px;
         <div class="scroll-indicator"></div>
     </section>
 <footer class="site-footer"><p class="hero-description-small">
-PMB-USA is a secure mailbox rental service, where individuals and businesses can receive mail and packages.
+PMB·ONE is a secure mailbox rental service, where individuals and businesses can receive mail and packages.
 Oue PMBs provides a real street address, which can be beneficial for receiving packages from all carriers (USPS, UPS, FedEx, etc.) and is often required for business registrations.
 Package Acceptance: PMBs can accept packages from all carriers, including UPS, FedEx,USPS with extra services such as package receiving and holding, mail forwarding.
 Flexibility and Access: Our location have extended hours, including weekends, offering more flexibility for access.
 Privacy and Professionalism: With an actual street address, which can enhance the professional image of a business. We also offering more privacy with VIP plan.
 Our PMBs provide more flexibility, services, and a real street address with secure mail receiving options, making them a versatile choice for both individuals and businesses.</p></footer>
+	<div id="pmb-footer">
+
+    <div id="wallWrap">
+    <div id="scanner">
+        <div id="scanLine"></div>
+        <div id="xtubeBall"></div>
+    </div>
+
+    <div id="pmbWall"></div>
+</div>
+
+    <div id="footerStatus">
+        PMB SYSTEM ONLINE
+    </div>
+
+</div>
 <!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
 
@@ -1685,7 +2249,150 @@ break;
         .classList.add("active");
 }
 	</script>
+<script>
+const wall = document.getElementById("pmbWall");
+const vip = document.getElementById("vip");
+const ball = document.getElementById("xtubeBall");
 
+/* ---------------------------
+   600 PMB GENERATION
+----------------------------*/
+for(let i=1;i<=600;i++){
+
+    const div=document.createElement("div");
+
+    div.className="pmb";
+    div.dataset.id=i;
+    div.textContent=i;
+
+    if(Math.random()<0.08){
+        div.classList.add("active");
+    }
+
+    if(i===140){
+
+        setInterval(()=>{
+            div.textContent=
+            div.textContent==="140"
+                ?"YOU"
+                :"140";
+        },3000);
+
+    }
+
+    wall.appendChild(div);
+
+}
+	
+	const messages=[
+
+"⭐ VIP DELIVERY EN ROUTE",
+"📦 AMAZON PACKAGE RECEIVED",
+"📬 MAIL PROCESSED",
+"✈ INTERNATIONAL MAIL CLEARED",
+"🚚 USPS ARRIVING",
+"📮 PMB SYSTEM ONLINE"
+
+];
+
+let msg=0;
+
+function rotateStatus(){
+
+    gsap.to(vip,{
+
+        opacity:0,
+
+        duration:.35,
+
+        onComplete(){
+
+            vip.textContent=messages[msg];
+
+            msg=(msg+1)%messages.length;
+
+            gsap.to(vip,{
+                opacity:1,
+                duration:.35
+            });
+
+        }
+
+    });
+
+}
+
+rotateStatus();
+
+setInterval(rotateStatus,7000);
+	function ballRun(){
+
+    gsap.fromTo(ball,
+
+        {
+            x:-20
+        },
+
+        {
+
+            x:wall.offsetWidth,
+
+            duration:8,
+
+            ease:"none",
+
+            onComplete:ballRun
+
+        }
+
+    );
+
+}
+
+ballRun();
+const boxes=document.querySelectorAll(".pmb");
+
+gsap.ticker.add(()=>{
+
+    const x=ball.getBoundingClientRect().left;
+
+    boxes.forEach(box=>{
+
+        const r=box.getBoundingClientRect();
+
+        if(Math.abs(r.left-x)<6){
+
+            box.classList.add("active");
+
+            clearTimeout(box.timer);
+
+            box.timer=setTimeout(()=>{
+
+                box.classList.remove("active");
+
+            },700);
+
+        }
+
+    });
+
+});
+	setInterval(()=>{
+
+    const items=document.querySelectorAll(".pmb");
+
+    const r=items[Math.floor(Math.random()*items.length)];
+
+    r.classList.add("active");
+
+    setTimeout(()=>{
+
+        r.classList.remove("active");
+
+    },800);
+
+},300);
+	</script>
 </body>
 
 </html>

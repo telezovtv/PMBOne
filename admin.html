@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>PMB Admin Login</title>
+
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* same style base */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background: linear-gradient(135deg,#0a0a0a,#1a1a2e);
+}
+
+.hero-grid {
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-image:
+    linear-gradient(rgba(0,242,254,0.03) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,242,254,0.03) 1px, transparent 1px);
+    background-size:50px 50px;
+}
+
+.dashboard {
+    width: 90%;
+    max-width: 380px;
+    padding: 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.15);
+    text-align:center;
+}
+
+input {
+    width: 80%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+	/* =========================
+   SMALL ADMIN TYPOGRAPHY
+========================= */
+
+h2 {
+    font-size: 16px;
+    margin: 8px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+p {
+    font-size: 11px;
+    margin: 4px 0;
+    opacity: 0.75;
+    line-height: 1.4;
+}
+
+/* optional tighter dashboard text */
+.value {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* reduce card padding for compact admin feel */
+.card {
+    padding: 8px 10px;
+    border-radius: 12px;
+}
+
+/* header smaller */
+.header h1 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.header p {
+    font-size: 10px;
+    opacity: 0.6;
+}
+	@media (max-width: 768px) {
+
+    .admin-wrap {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .admin-list,
+    .admin-editor {
+        width: 100%;
+    }
+
+    .dashboard {
+        width: 96%;
+        padding: 14px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    table {
+        font-size: 11px;
+    }
+
+    td, th {
+        padding: 6px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+<div class="hero-grid"></div>
+
+<div class="dashboard">
+
+<h2>PMB ADMIN</h2>
+<p>Login Panel</p>
+
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="loginAdmin()">LOGIN</button>
+
+</div>
+</div>
+
+<script>
+async function loginAdmin() {
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (!window.sb) {
+        alert("Supabase not loaded");
+        return;
+    }
+
+    const { data, error } = await window.sb
+        .from("admins")
+        .select("*")
+        .eq("username", username)
+        .eq("password", password)
+        .maybeSingle();
+
+    console.log("ADMIN LOGIN:", data, error);
+
+    if (error || !data) {
+        alert("Invalid credentials");
+        return;
+    }
+
+    localStorage.setItem("pmb_admin", JSON.stringify(data));
+
+    window.location.href = "admin-dashboard.html";
+}
+</script>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabaseUrl = "https://kogawaehnkegmtnyiwzu.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvZ2F3YWVobmtlZ210bnlpd3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjIyNDUsImV4cCI6MjA5NjIzODI0NX0.TZkcaatq1FVeRPvhWUqE2td4iwTFVHxjktpsL6MhK8E";
+
+window.sb = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+
+</body>
+</html>

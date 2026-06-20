@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMB Dashboard</title>
+
+<style>
+/* ===== BACKGROUND ===== */
+      body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+			    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+			margin: 0;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+			width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape1 {
+            width: 500px;
+            height: 500px;
+            background: #00f2fe;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 400px;
+            height: 400px;
+            background: #4facfe;
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -7s;
+        }
+
+        .shape3 {
+            width: 300px;
+            height: 300px;
+            background: #00d4ff;
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+        }
+/* ===== GLASS CONTAINER ===== */
+.dashboard {
+    width: 92%;
+    max-width: 420px;
+    padding: 20px;
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+
+    color: white;
+}
+
+/* ===== HEADER ===== */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.header p {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* ===== CARDS ===== */
+.card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+}
+
+.label {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+.value {
+    font-size: 16px;
+    margin-top: 4px;
+    font-weight: bold;
+}
+
+/* ===== STATUS COLORS ===== */
+.active { color: #4cff88; }
+.warn { color: #ffd24c; }
+.bad { color: #ff4c4c; }
+	.value.alert{
+    color:#ffd24c;
+    animation:pulseMail 2s infinite;
+}
+
+@keyframes pulseMail{
+
+    0%,100%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:.4;
+    }
+}
+	button {
+     padding: 8px 12px;
+    margin: 6px 0;
+
+    border-radius: 14px;
+    border: none;
+
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    backdrop-filter: blur(12px);
+
+    transition: all 0.2s ease;
+
+    cursor: pointer;
+}
+	button:hover {
+    background: rgba(0, 242, 254, 0.15);
+    transform: scale(1.02);
+}
+
+button:active {
+    transform: scale(0.97);
+    background: rgba(0, 242, 254, 0.25);
+}
+	.ios-group {
+    background: rgba(255,255,255,0.04);
+    padding: 12px;
+    border-radius: 18px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+	.ios-group button {
+    border-radius: 12px;
+}
+</style>
+</head>
+
+<body>
+  <section class="hero">
+        <div class="hero-background">
+            <div class="hero-grid"></div>
+            <div class="floating-shapes">
+                <div class="shape shape1"></div>
+                <div class="shape shape2"></div>
+                <div class="shape shape3"></div>
+            </div>
+        </div>
+<div class="dashboard"><button onclick="logoutPMB()">Logout</button>
+
+    <div class="header">
+        <h1>PMB DASHBOARD</h1>
+        <p id="userLine">Loading...</p>
+    </div>
+
+    <div class="card">
+        <div class="label">User</div>
+        <div class="value" id="userName">�</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Status</div>
+        <div class="value active" id="status">�</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Paid Until</div>
+        <div class="value" id="paid">�</div>
+    </div>
+<div class="card">
+    <div class="label">Mail Waiting</div>
+    <div class="value" id="mail">...</div>
+</div>
+
+<div class="card">
+    <div class="label">Package Waiting</div>
+    <div class="value" id="package">...</div>
+</div>
+<div id="notes"></div>
+	<hr>
+
+<h3>Contact Admin</h3>
+
+<textarea
+    id="customerMessage"
+    placeholder="Send a message to PMB Admin..."
+></textarea>
+
+<button onclick="sendMessageToAdmin()">
+    📨 Message Admin
+</button>
+</div>
+</section>
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+	const supabaseUrl = "https://kogawaehnkegmtnyiwzu.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvZ2F3YWVobmtlZ210bnlpd3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjIyNDUsImV4cCI6MjA5NjIzODI0NX0.TZkcaatq1FVeRPvhWUqE2td4iwTFVHxjktpsL6MhK8E";
+
+const sb = supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+const user = JSON.parse(localStorage.getItem("pmb_user"));
+
+console.log("DASH USER:", user);
+
+if (!user) {
+    document.body.innerHTML =
+        "<h2 style='color:white;text-align:center'>Not logged in</h2>";
+    throw new Error("No user session");
+}
+
+/* =====================
+   RENDER UI
+===================== */
+function renderUserData(user) {
+
+    const line = document.getElementById("userLine");
+    const name = document.getElementById("userName");
+    const status = document.getElementById("status");
+    const paid = document.getElementById("paid");
+    const mail = document.getElementById("mail");
+    const pkg = document.getElementById("package");
+    const notes = document.getElementById("notes");
+
+    if (line) line.innerText = `PMB #${user.pmb_number || "—"}`;
+    if (name) name.innerText = user.customer_name || "N/A";
+    if (status) status.innerText = user.account_status || "ACTIVE";
+    if (paid) paid.innerText = user.paid_until || "—";
+
+    if (mail) mail.innerText = user.mail_waiting ? "📬 YES" : "No";
+    if (pkg) pkg.innerText = user.package_waiting ? "📦 YES" : "No";
+
+    if (notes) {
+        notes.innerText = user.admin_notes || "No messages yet";
+    }
+}
+
+	async function sendMessageToAdmin() {
+
+    const user =
+        JSON.parse(localStorage.getItem("pmb_user"));
+
+    if (!user?.id) {
+        alert("Not logged in");
+        return;
+    }
+
+    const msg =
+        document.getElementById("customerMessage").value;
+
+    if (!msg.trim()) {
+        alert("Write a message");
+        return;
+    }
+
+    const { error } = await sb
+        .from("mailboxes")
+        .update({
+            client_message: msg,
+            client_message_read: false
+        })
+        .eq("id", user.id);
+
+    if (error) {
+        console.error(error);
+        alert("Failed to send");
+        return;
+    }
+
+    alert("Message sent");
+
+    document.getElementById("customerMessage").value = "";
+}
+/* =====================
+   EXPIRY CHECK
+===================== */
+function checkExpiry(user) {
+
+    const warning = document.getElementById("expiryWarning");
+    if (!warning || !user.paid_until) return;
+
+    const now = Date.now();
+    const expiry = new Date(user.paid_until).getTime();
+
+    const diffDays = Math.floor((expiry - now) / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 0) {
+        warning.innerHTML = "❌ EXPIRED";
+        warning.style.color = "red";
+    } else if (diffDays <= 10) {
+        warning.innerHTML = `⚠️ ${diffDays} days left to renew`;
+        warning.style.color = "#ffcc00";
+    } else {
+        warning.innerHTML = "";
+    }
+}
+
+/* =====================
+   INITIAL LOAD
+===================== */
+renderUserData(user);
+checkExpiry(user);
+
+	
+/* =====================
+   LIVE SYNC
+===================== */
+async function syncMailbox() {
+
+    const cached = JSON.parse(localStorage.getItem("pmb_user"));
+    if (!cached?.id) return;
+
+    const { data, error } = await sb
+        .from("mailboxes")
+        .select("*")
+        .eq("id", cached.id)
+        .maybeSingle();
+
+    if (error || !data) {
+        console.error("SYNC ERROR:", error);
+        return;
+    }
+
+    localStorage.setItem("pmb_user", JSON.stringify(data));
+
+    renderUserData(data);
+    checkExpiry(data);
+}
+
+syncMailbox();
+setInterval(syncMailbox, 15000);
+
+/* =====================
+   LOGOUT
+===================== */
+function logoutPMB() {
+    localStorage.removeItem("pmb_user");
+    window.location.href = "index.html";
+}
+</script>
+</body>
+</html>
