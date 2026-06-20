@@ -192,6 +192,7 @@ No messages
 <button onclick="sendMailNotice()">📬Notice</button>
 <button onclick="sendEmail()">📧Email</button>
 <button onclick="sendSMS()">📱SMS</button>
+<button onclick="updatePassword()">🔑 Password</button>		
 		</div>
 
 </div>
@@ -314,6 +315,45 @@ function selectMailbox(box) {
         selectedMailbox.client_message || "No messages";
 
     console.log("SELECTED:", selectedMailbox.pmb_number, selectedMailbox.paid_until);
+}
+	
+	async function updatePassword() {
+
+    if (!selectedMailbox) {
+        alert("Select a mailbox first");
+        return;
+    }
+
+    const newPass = prompt(
+        `New password for ${selectedMailbox.pmb_number}:`,
+        ""
+    );
+
+    if (newPass === null) return;
+
+    const password = newPass.trim();
+
+    if (password === "") {
+        alert("Password cannot be empty");
+        return;
+    }
+
+    const { error } = await sb
+        .from("mailboxes")
+        .update({
+            login_password: password
+        })
+        .eq("id", selectedMailbox.id);
+
+    if (error) {
+        alert("Password update failed");
+        console.error(error);
+        return;
+    }
+
+    alert(`Password updated for ${selectedMailbox.pmb_number}`);
+
+    loadMailboxes();
 }
 /* =====================
    SAVE
