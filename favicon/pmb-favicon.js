@@ -14,87 +14,73 @@ favicon.rel = "icon";
 
 let t = 0;
 
-// 0 ? 1 ? 0 loop every 2 seconds
+// 2 second cycle
 const cycleTime = 2000;
 
-function getProgress(ms){
+// blinking control for dot
+let blink = 1;
+
+function progress(ms){
     return (ms % cycleTime) / cycleTime;
 }
 
-// ping-pong (left to right then back)
-function getScannerX(p){
-    return p < 0.5
-        ? p * 2
-        : (1 - p) * 2;
+// ping-pong scanner (0 → 1 → 0)
+function scannerPos(p){
+    return p < 0.5 ? p * 2 : (1 - p) * 2;
 }
 
-let dotBounce = 0;
-
+// background
 function drawBackground(){
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0,0,size,size);
 }
 
-// cyan dot with subtle float + bounce
+// cyan i-dot (bigger + blinking)
 function drawDot(){
 
-    const float = Math.sin(t / 200) * 0.8;
-    const bounce = Math.max(0, dotBounce);
+    // blink every ~500ms
+    blink = Math.floor(t / 250) % 2;
 
-    const y = 16 + float - bounce;
+    const alpha = blink ? 1 : 0.35;
 
-    ctx.fillStyle = "#00ffff";
+    ctx.fillStyle = `rgba(0,255,255,${alpha})`;
 
+    // BIGGER BALL (requested)
     ctx.beginPath();
-    ctx.arc(16, y, 2.4, 0, Math.PI * 2);
+    ctx.arc(16,16,3.2,0,Math.PI*2);
     ctx.fill();
 
-    // tiny glow
-    ctx.fillStyle = "rgba(0,255,255,0.4)";
+    // glow
+    ctx.fillStyle = `rgba(0,255,255,${alpha * 0.4})`;
     ctx.beginPath();
-    ctx.arc(16, y, 3.5, 0, Math.PI * 2);
+    ctx.arc(16,16,4.5,0,Math.PI*2);
     ctx.fill();
 }
 
-// red vertical scanner line
+// red scanner line (2.5px)
 function drawScanner(x){
 
-    const px = Math.floor(x * size);
+    const px = x * size;
 
-    // thickness starts at 2px (your requirement)
-    const w = 2;
+    const w = 2.5; // 2 + 0.5 px requirement
 
     ctx.fillStyle = "rgba(255,0,0,0.9)";
     ctx.fillRect(px - w/2, 0, w, size);
 
-    // glow tail
+    // soft glow trail
     ctx.fillStyle = "rgba(255,0,0,0.25)";
-    ctx.fillRect(px - 4, 0, 8, size);
-}
-
-// collision logic (scanner passes center)
-function updateBounce(scannerX){
-
-    const px = scannerX * size;
-
-    if(Math.abs(px - 16) < 1.2){
-        dotBounce = 3; // trigger bounce
-    }
-
-    dotBounce *= 0.85; // decay
+    ctx.fillRect(px - 5, 0, 10, size);
 }
 
 function loop(ms){
 
     t = ms;
 
-    const p = getProgress(ms);
-    const scannerX = getScannerX(p);
-
-    updateBounce(scannerX);
+    const p = progress(ms);
+    const x = scannerPos(p);
 
     drawBackground();
-    drawScanner(scannerX);
+    drawScanner(x);
     drawDot();
 
     favicon.href = canvas.toDataURL("image/png");
