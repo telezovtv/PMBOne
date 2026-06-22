@@ -72,7 +72,12 @@ function drawScanner(x){
     ctx.fillRect(px - 5, 0, 10, size);
 }
 
+let lastFrame = 0;
+
 function loop(ms){
+
+    if(ms - lastFrame < 80) return;
+    lastFrame = ms;
 
     t = ms;
 
@@ -84,8 +89,4 @@ function loop(ms){
     drawDot();
 
     favicon.href = canvas.toDataURL("image/png");
-
-    requestAnimationFrame(loop);
 }
-
-requestAnimationFrame(loop);
