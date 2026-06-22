@@ -51,23 +51,42 @@ function drawRings(){
 
 function drawSweep(){
 
-    glow("#00ffff",8);
+    // glow for sweep line
+    glow("#00ffff", 6);
 
-    const x=16+Math.cos(angle)*15;
-    const y=16+Math.sin(angle)*15;
+    const x = 16 + Math.cos(angle) * 15;
+    const y = 16 + Math.sin(angle) * 15;
 
-    const grad=ctx.createLinearGradient(16,16,x,y);
+    // sweep beam (cyan fading line)
+    const grad = ctx.createLinearGradient(16,16,x,y);
 
-    grad.addColorStop(0,"rgba(0,255,255,.8)");
-    grad.addColorStop(1,"rgba(0,255,255,0)");
+    grad.addColorStop(0, "rgba(0,255,255,.6)");
+    grad.addColorStop(1, "rgba(0,255,255,0)");
 
-    ctx.strokeStyle=grad;
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.5;
 
     ctx.beginPath();
     ctx.moveTo(16,16);
     ctx.lineTo(x,y);
     ctx.stroke();
 
+
+    // 🔴 RED MOVING RADAR BALL (main focus)
+    glow("#ff3030", 10);
+
+    ctx.fillStyle = "#ff3030";
+
+    ctx.beginPath();
+    ctx.arc(x, y, 2.3, 0, Math.PI * 2);
+    ctx.fill();
+
+
+    // optional tiny highlight (gives “LED shine”)
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.beginPath();
+    ctx.arc(x - 0.6, y - 0.6, 0.6, 0, Math.PI * 2);
+    ctx.fill();
 }
 
 function drawTargets(){
