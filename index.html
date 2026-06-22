@@ -692,18 +692,28 @@ content="index,follow">
         .scroll-indicator {
             position: absolute;
             bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
+    animation: bounce 2s infinite;
         }
+/* LEFT CORNER */
+.scroll-indicator.left {
+    left: 5px;
+}
 
+/* RIGHT CORNER */
+.scroll-indicator.right {
+    right: 5px;
+}
+
+/* remove centering behavior */
+.scroll-indicator.left,
+.scroll-indicator.right {
+    transform: none;
+}
         .scroll-indicator::before {
             content: '';
             display: block;
             width: 24px;
             height: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.0);
-            border-radius: 0px;
             position: relative;
         }
 
@@ -1477,7 +1487,7 @@ color:#E6E6FA;
 </div>
         </div>
 
-        <div class="scroll-indicator"></div>
+        <div class="scroll-indicator-left"></div><div class="scroll-indicator-right"></div>
     </section>
 <footer class="site-footer"><p class="hero-description-small">
 PMB·ONE is a secure mailbox rental service, where individuals and businesses can receive mail and packages.
