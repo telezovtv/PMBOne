@@ -28,18 +28,9 @@ function glow(color,blur){
 
 function drawBackground(){
 
-    ctx.clearRect(0,0,size,size);
-
-    const g=ctx.createRadialGradient(
-        16,16,2,
-        16,16,16
-    );
-
-    g.addColorStop(0,"rgba(0,255,255,.15)");
-    g.addColorStop(1,"rgba(0,0,0,0)");
-
-    ctx.fillStyle=g;
+    ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0,0,size,size);
+
 }
 
 function drawRings(){
