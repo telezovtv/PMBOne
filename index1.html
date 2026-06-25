@@ -1746,16 +1746,18 @@ function renderReservation(reservation) {
     }
 }
 
+
 async function selectPayment(method) {
 
     pmbSignupTemp.payment_method = method;
 
+    // -------------------------
     // 1. FIND FIRST FREE MAILBOX
+    // -------------------------
     const { data: freeBox, error: fetchError } = await window.sb
         .from("mailboxes")
         .select("*")
-        .eq("account_status", "FREE")
-        .eq("account_status", "AVAILABLE")
+        .eq("account_status", "FREE") // ✅ FIXED (ONLY ONE RULE)
         .order("pmb_number", { ascending: true })
         .limit(1)
         .maybeSingle();
@@ -1771,74 +1773,81 @@ async function selectPayment(method) {
         return;
     }
 
-    // 2. CREATE STRIPE CHECKOUT SESSION INSTEAD OF RESERVING
-const { data, error } = await window.sb.functions.invoke("create-checkout-session", {
-    body: {
-        name: pmbSignupTemp.name,
+    // -------------------------
+    // 2. CREATE STRIPE SESSION
+    // -------------------------
+    const { data, error } = await window.sb.functions.invoke(
+        "create-checkout-session",
+        {
+            body: {
+                name: pmbSignupTemp.name,
+                email: pmbSignupTemp.email,
+                password: pmbSignupTemp.password,
+                mailbox_type: pmbSignupTemp.mailbox_type,
+                mailbox_term: pmbSignupTemp.mailbox_term,
+                payment_method: method,
+                pmb_number: freeBox.pmb_number // ✅ IMPORTANT (track box)
+            }
+        }
+    );
+
+    if (error) {
+        console.error(error);
+        alert("Stripe session failed");
+        return;
+    }
+
+    if (!data || !data.url) {
+        alert("Invalid Stripe response");
+        return;
+    }
+
+    // -------------------------
+    // 3. STORE CHECKOUT STATE (TEMP ONLY)
+    // -------------------------
+    const checkoutState = {
+        pmb_number: freeBox.pmb_number,
+        customer_name: pmbSignupTemp.name,
         email: pmbSignupTemp.email,
-        password: pmbSignupTemp.password,
         mailbox_type: pmbSignupTemp.mailbox_type,
         mailbox_term: pmbSignupTemp.mailbox_term,
-        payment_method: method
-    }
-});
+        payment_method: method,
+        account_status: "PENDING",
+        created_at: Date.now()
+    };
 
-if (error) {
-    console.error(error);
-    alert("Stripe session failed");
-    return;
+    console.log("CHECKOUT INIT:", checkoutState);
+
+    localStorage.setItem("pmb_checkout", JSON.stringify(checkoutState));
+
+    // -------------------------
+    // 4. UI FEEDBACK
+    // -------------------------
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "flex");
+
+    document.getElementById("reservationInfo").innerHTML = `
+        <b>PMB:</b> ${checkoutState.pmb_number}<br>
+        <b>Name:</b> ${checkoutState.customer_name}<br>
+        <b>Email:</b> ${checkoutState.email}<br>
+        <b>Type:</b> ${checkoutState.mailbox_type}<br>
+        <b>Term:</b> ${checkoutState.mailbox_term} Months<br>
+        <b>Status:</b> ${checkoutState.account_status}<br>
+        <b>Payment:</b> ${checkoutState.payment_method}
+    `;
+
+    document.getElementById("idNotice").innerHTML =
+        method === "cash"
+            ? "🏢 Bring ID to office"
+            : "⚠️ Redirecting to secure Stripe checkout...";
+
+    alert("REDIRECTING TO PAYMENT FOR: " + checkoutState.pmb_number);
+
+    // -------------------------
+    // 5. REDIRECT (STOP EXECUTION)
+    // -------------------------
+    window.location.href = data.url;
 }
-
-window.location.href = data.url;
-
-// 3. BUILD PAYMENT INIT OBJECT (NO MORE "RESERVED")
-const reservation = {
-    pmb_number: freeBox.pmb_number,
-    customer_name: pmbSignupTemp.name,
-    email: pmbSignupTemp.email,
-    mailbox_type: pmbSignupTemp.mailbox_type,
-    mailbox_term: pmbSignupTemp.mailbox_term,
-    payment_method: method,
-
-    // ✅ FIXED SYSTEM STATE
-    account_status: "PENDING",
-
-    created_at: Date.now()
-};
-
-console.log("PENDING MAILBOX INIT:", reservation);
-
-// store temporary checkout state (NOT final reservation anymore)
-localStorage.setItem("pmb_checkout", JSON.stringify(reservation));
-
-
-// 4. SHOW STEP 3 (PAYMENT STEP)
-document.getElementById("step2").style.display = "none";
-document.getElementById("step3").style.display = "flex";
-
-document.getElementById("reservationInfo").innerHTML = `
-    <b>PMB:</b> ${reservation.pmb_number}<br>
-    <b>Name:</b> ${reservation.customer_name}<br>
-    <b>Email:</b> ${reservation.email}<br>
-    <b>Type:</b> ${reservation.mailbox_type}<br>
-    <b>Term:</b> ${reservation.mailbox_term} Months<br>
-    <b>Status:</b> ${reservation.account_status}<br>
-    <b>Payment:</b> ${reservation.payment_method}
-`;
-
-document.getElementById("idNotice").innerHTML =
-    method === "cash"
-        ? "🏢 Bring ID to office"
-        : "⚠️ Redirecting to secure Stripe checkout...";
-
-
-// ❌ REMOVE countdown (Stripe handles timing now)
-// startCountdown(reservation.expires_at);
-
-alert("REDIRECTING TO PAYMENT FOR: " + reservation.pmb_number);
-}
-
-
 // -------------------------
 // CLOSE SIGNUP MODAL
 // -------------------------
