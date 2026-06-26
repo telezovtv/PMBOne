@@ -1543,9 +1543,9 @@ Our PMBs provide more flexibility, services, and a real street address with secu
     <input id="su_password" type="password" placeholder="Create Password">
 
     <select id="su_type">
-        <option value="PERSONAL">Personal Mailbox</option>
-        <option value="BUSINESS">Business Mailbox</option>
-        <option value="VIP">VIP Mailbox</option>
+<option value="PRIVATE">Private Mailbox</option>
+<option value="BUSINESS">Business Mailbox</option>
+<option value="VIP">VIP Mailbox</option>
     </select>
 
     <select id="su_term">
@@ -1610,50 +1610,43 @@ Loading price...
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 let pmbSignupTemp = {};
-function getMailboxRate(type){
 
-    if(type === "PERSONAL") return 14.99;
-
-    if(type === "BUSINESS") return 24.99;
-
-    if(type === "VIP") return 49.99;
-
-    return 0;
-}
-	
+const STRIPE_PRICING = {
+    PRIVATE: {
+        6: 70,
+        12: 120,
+        24: 200
+    },
+    BUSINESS: {
+        6: 70,   // adjust later if different
+        12: 120,
+        24: 200
+    },
+    VIP: {
+        6: 70,
+        12: 120,
+        24: 200
+    }
+};	
 function updatePricePreview() {
 
-    const type =
-        document.getElementById("su_type").value;
+    const type = document.getElementById("su_type").value;
+    const term = parseInt(document.getElementById("su_term").value);
 
-    const term =
-        parseInt(
-            document.getElementById("su_term").value
-        );
+    const total = STRIPE_PRICING?.[type]?.[term] || 0;
 
-    let monthly = 0;
-
-    if (type === "PERSONAL")
-        monthly = 14.99;
-
-    if (type === "BUSINESS")
-        monthly = 24.99;
-
-    if (type === "VIP")
-        monthly = 49.99;
-
-    const total =
-        (monthly * term).toFixed(2);
+    const monthly = (total / term).toFixed(2);
 
     document.getElementById("pricePreview").innerHTML = `
-        <b>${type}</b><br>
+        <b>${type} Mailbox</b><br>
         ${term} Months<br>
-        Monthly: $${monthly}<br>
+        Estimated monthly (display only): $${monthly}<br>
         <span style="font-size:18px;color:#4cff88">
             Total: $${total}
         </span>
     `;
-}	
+}
+
 function pmbGoStep2() {    
 
     pmbSignupTemp = {
@@ -1719,9 +1712,12 @@ function showStep(step) {
     document.getElementById("step2").style.display = "none";
     document.getElementById("step3").style.display = "none";
 
-    document.getElementById(step).style.display = "flex";
-}
+    const target = document.getElementById(step);
 
+    if (target) {
+        target.style.display = "flex";
+    }
+}
 function renderReservation(reservation) {
 
     const box = document.getElementById("reservationInfo");
@@ -1746,18 +1742,21 @@ function renderReservation(reservation) {
     }
 }
 
+
 async function selectPayment(method) {
 
     pmbSignupTemp.payment_method = method;
 
+    // -------------------------
     // 1. FIND FIRST FREE MAILBOX
+    // -------------------------
     const { data: freeBox, error: fetchError } = await window.sb
         .from("mailboxes")
         .select("*")
-        .eq("occupancy", "FREE")
-        .eq("account_status", "AVAILABLE")
-        .order("pmb_number", { ascending: true })
-        .limit(1)
+        .eq("account_status", "FREE")
+.eq("mailbox_type", pmbSignupTemp.mailbox_type)
+.order("pmb_number", { ascending: true })
+.limit(1)
         .maybeSingle();
 
     if (fetchError) {
@@ -1771,95 +1770,95 @@ async function selectPayment(method) {
         return;
     }
 
-    // 2. RESERVE MAILBOX
-    const expiresAt = Date.now() + (24 * 60 * 60 * 1000);
+    // -------------------------
+    // 2. CREATE STRIPE SESSION
+    // -------------------------
+    const { data, error } = await window.sb.functions.invoke(
+        "create-checkout-session",
+        {
+            body: {
+                name: pmbSignupTemp.name,
+                email: pmbSignupTemp.email,
+                password: pmbSignupTemp.password,
+                mailbox_type: pmbSignupTemp.mailbox_type,
+                mailbox_term: pmbSignupTemp.mailbox_term,
+                payment_method: method,
+                pmb_number: freeBox.pmb_number // ✅ IMPORTANT (track box)
+            }
+        }
+    );
 
-    const { error: updateError } = await window.sb
-        .from("mailboxes")
-        .update({
-    customer_name:
-        pmbSignupTemp.name,
-
-    customer_email:
-        pmbSignupTemp.email,
-
-    login_password:
-        pmbSignupTemp.password,
-
-    mailbox_type:
-        pmbSignupTemp.mailbox_type,
-
-    mailbox_term:
-        pmbSignupTemp.mailbox_term,
-
-    monthly_rate:
-        getMailboxRate(
-            pmbSignupTemp.mailbox_type
-        ),
-
-            occupancy: "OCCUPIED",
-            account_status: "RESERVED",
-
-            admin_notes:
-                method === "cash"
-                    ? "Cash payment - awaiting office visit"
-                    : "Online payment - awaiting payment",
-
-            paid_until: new Date(expiresAt).toISOString()
-        })
-        .eq("id", freeBox.id);
-
-    if (updateError) {
-        console.error(updateError);
-        alert("Failed to reserve mailbox");
+    if (error) {
+        console.error(error);
+        alert("Stripe session failed");
         return;
     }
 
-    // 3. BUILD RESERVATION OBJECT
-    const reservation = {
+    if (!data || !data.url) {
+        alert("Invalid Stripe response");
+        return;
+    }
+
+    // -------------------------
+    // 3. STORE CHECKOUT STATE (TEMP ONLY)
+    // -------------------------
+    const checkoutState = {
         pmb_number: freeBox.pmb_number,
         customer_name: pmbSignupTemp.name,
         email: pmbSignupTemp.email,
         mailbox_type: pmbSignupTemp.mailbox_type,
         mailbox_term: pmbSignupTemp.mailbox_term,
         payment_method: method,
-        account_status: "RESERVED",
-        expires_at: expiresAt
+        account_status: "PENDING",
+        created_at: Date.now()
     };
 
-    console.log("RESERVED MAILBOX:", reservation);
+    console.log("CHECKOUT INIT:", checkoutState);
 
-    localStorage.setItem("pmb_reservation", JSON.stringify(reservation));
+    localStorage.setItem("pmb_checkout", JSON.stringify(checkoutState));
 
-    // 4. SHOW STEP 3
+    // -------------------------
+    // 4. UI FEEDBACK
+    // -------------------------
     document.getElementById("step2").style.display = "none";
     document.getElementById("step3").style.display = "flex";
 
     document.getElementById("reservationInfo").innerHTML = `
-        <b>PMB:</b> ${reservation.pmb_number}<br>
-        <b>Name:</b> ${reservation.customer_name}<br>
-        <b>Email:</b> ${reservation.email}<br>
-        <b>Type:</b> ${reservation.mailbox_type}<br>
-        <b>Term:</b> ${reservation.mailbox_term} Months<br>
-        <b>Status:</b> ${reservation.account_status}<br>
-        <b>Payment:</b> ${reservation.payment_method}
+        <b>PMB:</b> ${checkoutState.pmb_number}<br>
+        <b>Name:</b> ${checkoutState.customer_name}<br>
+        <b>Email:</b> ${checkoutState.email}<br>
+        <b>Type:</b> ${checkoutState.mailbox_type}<br>
+        <b>Term:</b> ${checkoutState.mailbox_term} Months<br>
+        <b>Status:</b> ${checkoutState.account_status}<br>
+        <b>Payment:</b> ${checkoutState.payment_method}
     `;
 
     document.getElementById("idNotice").innerHTML =
         method === "cash"
             ? "🏢 Bring ID to office"
-            : "⚠️ Complete payment within 24 hours + ID required";
+            : "⚠️ Redirecting to secure Stripe checkout...";
 
-    startCountdown(reservation.expires_at);
+    alert("REDIRECTING TO PAYMENT FOR: " + checkoutState.pmb_number);
 
-    alert("MAILBOX RESERVED: " + reservation.pmb_number);
+    // -------------------------
+    // 5. REDIRECT (STOP EXECUTION)
+    // -------------------------
+    window.location.href = data.url;
 }
-	function closeSignupModal() {
+// -------------------------
+// CLOSE SIGNUP MODAL
+// -------------------------
+function closeSignupModal() {
     document.getElementById("signupModal").classList.remove("active");
 }
-	window.onload = function () {
 
-    const saved = localStorage.getItem("pmb_reservation");
+
+// -------------------------
+// PAGE LOAD RESTORE (PENDING STATE ONLY)
+// -------------------------
+window.onload = function () {
+
+    const saved = localStorage.getItem("pmb_checkout");
 
     if (!saved) return;
 
@@ -1867,9 +1866,11 @@ async function selectPayment(method) {
 
     const now = Date.now();
 
-    // ❌ expired cleanup
-    if (reservation.expires_at && now > reservation.expires_at) {
-        localStorage.removeItem("pmb_reservation");
+    // ⛔ cleanup expired checkout intent (30 min safety window)
+    const EXPIRE_TIME = 30 * 60 * 1000;
+
+    if (reservation.created_at && now - reservation.created_at > EXPIRE_TIME) {
+        localStorage.removeItem("pmb_checkout");
         return;
     }
 
@@ -1879,7 +1880,12 @@ async function selectPayment(method) {
     // show banner instead of modal
     document.getElementById("pmbBanner").style.display = "flex";
 };
-	function openActiveReservation() {
+
+
+// -------------------------
+// OPEN ACTIVE CHECKOUT
+// -------------------------
+function openActiveReservation() {
 
     const reservation = window.activeReservation;
     if (!reservation) return;
@@ -1887,7 +1893,17 @@ async function selectPayment(method) {
     document.getElementById("signupModal").classList.add("active");
 
     showStep("step3");
-    renderReservation(reservation);
+
+    // ⚠️ only preview data, NOT real reservation anymore
+    document.getElementById("reservationInfo").innerHTML = `
+        <b>PMB:</b> ${reservation.pmb_number}<br>
+        <b>Name:</b> ${reservation.customer_name}<br>
+        <b>Email:</b> ${reservation.email}<br>
+        <b>Type:</b> ${reservation.mailbox_type}<br>
+        <b>Term:</b> ${reservation.mailbox_term} Months<br>
+        <b>Status:</b> ${reservation.account_status}<br>
+        <b>Payment:</b> ${reservation.payment_method}
+    `;
 
     closeBanner();
 }
@@ -1936,165 +1952,174 @@ function closeBanner() {
 window.sb = window.supabaseClient;
     console.log("SUPABASE READY:", window.supabaseClient);
 
-    // -------------------------
-    // MOBILE MENU
-    // -------------------------
-    const mobileToggle = document.getElementById("mobileToggle");
-    const navMenu = document.querySelector(".nav-menu");
+// -------------------------
+// MOBILE MENU
+// -------------------------
+const mobileToggle = document.getElementById("mobileToggle");
+const navMenu = document.querySelector(".nav-menu");
 
-    if (mobileToggle && navMenu) {
-        mobileToggle.addEventListener("click", () => {
-            navMenu.classList.toggle("active");
-			
-			async function cleanupExpiredMailboxes() {
+if (mobileToggle && navMenu) {
+    mobileToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
 
-    const now = new Date().toISOString();
+        // -------------------------
+        // CLEANUP EXPIRED MAILBOXES
+        // -------------------------
+        async function cleanupExpiredMailboxes() {
 
-    const { data, error } = await window.sb
-        .from("mailboxes")
-        .select("id, paid_until")
-        .eq("occupancy", "OCCUPIED")
-        .eq("account_status", "RESERVED");
+            const now = new Date();
 
-    if (error) {
-        console.error(error);
-        return;
-    }
-
-    for (const box of data) {
-
-        if (!box.paid_until) continue;
-
-        if (new Date(box.paid_until) < new Date(now)) {
-
-            await window.sb
+            const { data, error } = await window.sb
                 .from("mailboxes")
-                .update({
-                    customer_name: null,
-                    customer_email: null,
-                    login_password: null,
-                    occupancy: "FREE",
-                    account_status: "AVAILABLE",
-                    paid_until: null,
-				status_history: [
-    {
-        status: "RESERVED",
-        time: new Date().toISOString()
-    }
-],
-                    admin_notes: "Auto-expired after 24h"
-				
-                })
-                .eq("id", box.id);
-        }
-    }
-
-    console.log("EXPIRY CLEANUP DONE");
-}
-			cleanupExpiredMailboxes();
-        });
-    }
-
-    // -------------------------
-    // LOGIN POPUP
-    // -------------------------
-
-    console.log("DOM READY");
-
-    const loginBtn = document.getElementById("loginBtn");
-    const loginModal = document.getElementById("loginModal");
-    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
-
-    console.log("loginBtn:", loginBtn);
-    console.log("loginSubmitBtn:", loginSubmitBtn);
-
-    // OPEN MODAL
-    loginBtn?.addEventListener("click", () => {
-        console.log("OPEN MODAL CLICK");
-        loginModal?.classList.add("active");
-    });
-
-    // LOGIN ACTION
-    loginSubmitBtn?.addEventListener("click", () => {
-        console.log("LOGIN SUBMIT CLICK");
-        loginMailbox();
-    });
-
-    // -------------------------
-    // SIGNUP POPUP
-    // -------------------------
-    const signupBtn = document.getElementById("signupBtn");
-    const signupModal = document.getElementById("signupModal");
-
-    if (signupBtn && signupModal) {
-        signupBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            signupModal.classList.add("active");
-        });
-    }
-
-    // -------------------------
-    // LOGIN FUNCTION
-    // -------------------------
-    window.loginMailbox = async function () {
-
-        try {
-
-            console.log("LOGIN STARTED");
-
-            const mailbox = document
-                .querySelector("#loginModal input[type='text']")
-                .value
-                .trim()
-                .toUpperCase();
-
-            const password = document
-                .querySelector("#loginModal input[type='password']")
-                .value
-                .trim();
-
-            console.log("INPUT:", mailbox, password);
-const { data: testRows, error: testError } = await window.supabaseClient
-    .from('mailboxes')
-    .select('pmb_number, login_password')
-    .limit(10);
-
-console.log("TEST ROWS:", testRows);
-console.log("TEST ERROR:", testError);
-            const { data, error } = await window.supabaseClient
-                .from('mailboxes')
-                .select('*')
-                .eq('pmb_number', mailbox)
-                .eq('login_password', password)
-                .maybeSingle();
-
-            console.log("LOGIN RESULT:", data, error);
+                .select("id, paid_until")
+                .eq("account_status", "ACTIVE");
 
             if (error) {
-                alert(error.message);
+                console.error(error);
                 return;
             }
 
-            if (!data) {
-                alert("Invalid mailbox or password");
-                return;
+            for (const box of data) {
+
+                if (!box.paid_until) continue;
+
+                if (new Date(box.paid_until) < now) {
+
+                    await window.sb
+                        .from("mailboxes")
+                        .update({
+                            customer_name: null,
+                            customer_email: null,
+                            login_password: null,
+
+                            account_status: "FREE", // ✅ FIXED (was AVAILABLE)
+
+                            paid_until: null,
+
+                            status_history: [
+                                {
+                                    status: "FREE", // ✅ FIXED (was RESERVED)
+                                    time: new Date().toISOString()
+                                }
+                            ],
+
+                            admin_notes: "Auto-expired after term ended"
+                        })
+                        .eq("id", box.id);
+                }
             }
 
-            localStorage.setItem("pmb_user", JSON.stringify(data));
-
-            console.log("STORED USER:", data);
-
-            window.location.href = "dashboard.html";
-
-        } catch (err) {
-            console.error("LOGIN ERROR:", err);
-            alert(err.message || "Login crashed");
+            console.log("EXPIRY CLEANUP DONE");
         }
-    };
 
-    // -------------------------
-    // CLOSE MODALS
-    // -------------------------
+        cleanupExpiredMailboxes();
+    });
+}
+
+// -------------------------
+// LOGIN POPUP
+// -------------------------
+
+console.log("DOM READY");
+
+const loginBtn = document.getElementById("loginBtn");
+const loginModal = document.getElementById("loginModal");
+const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+
+console.log("loginBtn:", loginBtn);
+console.log("loginSubmitBtn:", loginSubmitBtn);
+
+// OPEN MODAL
+loginBtn?.addEventListener("click", () => {
+    console.log("OPEN MODAL CLICK");
+    loginModal?.classList.add("active");
+});
+
+// LOGIN ACTION
+loginSubmitBtn?.addEventListener("click", () => {
+    console.log("LOGIN SUBMIT CLICK");
+    loginMailbox();
+});
+
+// -------------------------
+// SIGNUP POPUP
+// -------------------------
+const signupBtn = document.getElementById("signupBtn");
+const signupModal = document.getElementById("signupModal");
+
+if (signupBtn && signupModal) {
+    signupBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        signupModal.classList.add("active");
+    });
+}
+
+// -------------------------
+// LOGIN FUNCTION
+// -------------------------
+window.loginMailbox = async function () {
+
+    try {
+
+        console.log("LOGIN STARTED");
+
+        const mailbox = document
+            .querySelector("#loginModal input[type='text']")
+            .value
+            .trim()
+            .toUpperCase();
+
+        const password = document
+            .querySelector("#loginModal input[type='password']")
+            .value
+            .trim();
+
+        console.log("INPUT:", mailbox, password);
+
+        // DEBUG CHECK (optional but fine)
+        const { data: testRows, error: testError } = await window.supabaseClient
+            .from('mailboxes')
+            .select('pmb_number, login_password')
+            .limit(10);
+
+        console.log("TEST ROWS:", testRows);
+        console.log("TEST ERROR:", testError);
+
+        const { data, error } = await window.supabaseClient
+            .from('mailboxes')
+            .select('*')
+            .eq('pmb_number', mailbox)
+            .eq('login_password', password)
+            .eq('account_status', 'ACTIVE') // ✅ ADDED SAFETY RULE
+            .maybeSingle();
+
+        console.log("LOGIN RESULT:", data, error);
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        if (!data) {
+            alert("Invalid mailbox, password, or inactive account");
+            return;
+        }
+
+        localStorage.setItem("pmb_user", JSON.stringify(data));
+
+        console.log("STORED USER:", data);
+
+        window.location.href = "dashboard.html";
+
+    } catch (err) {
+        console.error("LOGIN ERROR:", err);
+        alert(err.message || "Login crashed");
+    }
+};
+
+// -------------------------
+// CLOSE MODALS
+// -------------------------
     document.querySelectorAll(".close-modal")
         .forEach(btn => {
             btn.addEventListener("click", () => {
@@ -2169,15 +2194,15 @@ break;
         <h3>Current Plans</h3>
 
         <p>
-            Personal Mailbox — from $14.99/mo
+            Private Mailbox — from $8.99/mo
         </p>
 
         <p>
-            Business Mailbox — from $24.99/mo
+            Business Mailbox — from $16.99/mo
         </p>
 
         <p>
-            VIP Mailbox — from $49.99/mo
+            VIP Mailbox — from $20.99/mo
         </p>
 
         <p>
@@ -2191,7 +2216,7 @@ break;
             title.innerText = "Contacts";
 
             content.innerHTML = `
-                Call (555) 123-4567
+                Call (718) 891-7654
             `;
         break;
 
@@ -2203,11 +2228,11 @@ break;
         <h3>Secure Mail Receiving</h3>
 
         <p>
-            Receive personal or business mail at a real street address.
+            Receive private personal or business mail at a real street address.
         </p>
 
         <p>
-            ✓ Personal Mailboxes<br>
+            ✓ Private Mailboxes<br>
             ✓ Business Mailboxes<br>
             ✓ VIP Mailbox Services
         </p>
