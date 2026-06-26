@@ -2025,7 +2025,7 @@ window.loginMailbox = async function () {
             .select('*')
             .eq('pmb_number', mailbox)
             .eq('login_password', password)
-            .eq('account_status', 'ACTIVE') // ✅ ADDED SAFETY RULE
+            .in('account_status', ['FREE', 'ACTIVE', 'VIP', 'RESERVED'])
             .maybeSingle();
 
         console.log("LOGIN RESULT:", data, error);
