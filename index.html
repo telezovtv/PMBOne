@@ -1402,7 +1402,7 @@ color:#E6E6FA;
 </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Home</a>
+                    <a href="#" class="nav-link" onclick="openPanel('BUY ADDONS')">PMB 🛒-💰</a>
                 </li>
                     
               <li class="nav-item">
@@ -1615,12 +1615,20 @@ let countdownInterval;
 // -------------------------
 // PRICING (UI ONLY)
 // -------------------------
-const STRIPE_PRICING = {
+
+const UI_PRICING = {
   PRIVATE: { 6: 70, 12: 120, 24: 200 },
   BUSINESS: { 6: 140, 12: 240, 24: 400 },
   VIP: { 6: 175, 12: 300, 24: 480 }
-};
-
+};	
+const PMB_ADDONS = [
+  {
+    id: "extra",
+    name: "EXTRA Handling",
+    price: 10,
+    price_id: "price_1TmD98CnUWCqsmAmShhBpB2G"
+  }
+];
 // -------------------------
 // PRICE PREVIEW
 // -------------------------
@@ -1635,7 +1643,7 @@ function updatePricePreview() {
   const type = typeEl.value;
   const term = parseInt(termEl.value);
 
-  const total = STRIPE_PRICING?.[type]?.[term];
+  const total = UI_PRICING?.[type]?.[term];
 
   if (!total) {
     box.innerHTML = "Select plan";
@@ -1698,6 +1706,70 @@ function pmbGoStep2() {
   console.log("STEP 2 OPENED");
 }
 
+async function buyAddon(addonId) {
+  const addon = PMB_ADDONS.find(a => a.id === addonId);
+  if (!addon) return alert("Addon not found");
+
+  try {
+    const res = await fetch("https://kogawaehnkegmtnyiwzu.supabase.co/functions/v1/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: [
+          {
+            price: addon.price_id,
+            quantity: 1
+          }
+        ]
+      })
+    });
+
+    const data = await res.json();
+
+    console.log("ADDON RESPONSE:", data);
+
+    if (!res.ok) {
+      alert(data.error || "Addon checkout failed");
+      return;
+    }
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("No checkout URL returned");
+    }
+
+  } catch (err) {
+    console.error("ADDON ERROR:", err);
+    alert("Network error - check console");
+  }
+}
+
+function renderAddons() {
+  const box = document.getElementById("addonsContainer");
+  if (!box) return;
+
+  box.innerHTML = PMB_ADDONS.map(a => `
+    <button onclick="buyAddon('${a.id}')"
+      style="margin:5px;padding:10px;background:#4cff88;border:none;">
+      + ${a.name} ($${a.price})
+    </button>
+  `).join("");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const type = document.getElementById("su_type");
+  const term = document.getElementById("su_term");
+
+  if (type && term) {
+    type.addEventListener("change", updatePricePreview);
+    term.addEventListener("change", updatePricePreview);
+    updatePricePreview();
+  }
+
+  renderAddons();
+});
+
 // -------------------------
 // BACK BUTTON
 // -------------------------
@@ -1710,38 +1782,85 @@ function pmbBackStep1() {
 // -------------------------
 async function selectPayment(method) {
 
-  pmbSignupTemp.payment_method = method;
+  try {
 
-  const { data, error } = await window.sb.functions.invoke(
-    "create-checkout-session",
-    {
-      body: {
-        name: pmbSignupTemp.name,
-        email: pmbSignupTemp.email,
-        password: pmbSignupTemp.password,
-        mailbox_type: pmbSignupTemp.mailbox_type,
-        mailbox_term: pmbSignupTemp.mailbox_term,
-        payment_method: method
+    pmbSignupTemp.payment_method = method;
+
+    const res = await fetch(
+      "https://kogawaehnkegmtnyiwzu.supabase.co/functions/v1/create-checkout-session",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: pmbSignupTemp.name,
+          email: pmbSignupTemp.email,
+          password: pmbSignupTemp.password,
+          mailbox_type: pmbSignupTemp.mailbox_type,
+          mailbox_term: pmbSignupTemp.mailbox_term,
+          payment_method: method
+        })
       }
-    }
-  );
+    );
 
-  if (error || !data?.url) {
-    console.error(error);
-    alert("Payment failed");
-    return;
-  }
+const data = await res.json();
+
+console.log("CHECKOUT RESPONSE:", data);
+
+if (!res.ok) {
+  console.error("Payment error:", data);
+  alert(data?.error || "Payment failed");
+  return;
+}
+
+// =========================
+// 🟠 CRYPTO FLOW (STEP 3)
+// =========================
+if (data.crypto) {
 
   showStep("step3");
 
-  document.getElementById("idNotice").innerHTML =
+  const notice = document.getElementById("idNotice");
+  if (notice) {
+    notice.innerHTML = `
+      💰 Send crypto payment:<br><br>
+      <b>${data.wallet.coin}</b><br>
+      <b>${data.wallet.network}</b><br><br>
+      <span style="word-break:break-all;">
+        ${data.wallet.address}
+      </span>
+    `;
+  }
+
+  return; // ❌ STOP HERE (NO STRIPE REDIRECT)
+}
+
+// =========================
+// 💳 STRIPE FLOW (NORMAL)
+// =========================
+if (!data?.url) {
+  alert("Missing Stripe URL");
+  return;
+}
+
+showStep("step3");
+
+const notice = document.getElementById("idNotice");
+if (notice) {
+  notice.innerHTML =
     method === "cash"
       ? "🏢 Cash selected - wait for approval"
       : "⚠️ Redirecting to Stripe...";
-
-  window.location.href = data.url;
 }
 
+window.location.href = data.url;
+
+  } catch (err) {
+    console.error("selectPayment crashed:", err);
+    alert(err.message || "Payment crashed");
+  }
+}
 // -------------------------
 // RESERVATION DISPLAY
 // -------------------------
@@ -1856,20 +1975,6 @@ function closeBanner() {
   if (b) b.style.display = "none";
 }
 
-// -------------------------
-// LIVE PRICE EVENTS
-// -------------------------
-document.addEventListener("DOMContentLoaded", () => {
-
-  const type = document.getElementById("su_type");
-  const term = document.getElementById("su_term");
-
-  if (type && term) {
-    type.addEventListener("change", updatePricePreview);
-    term.addEventListener("change", updatePricePreview);
-    updatePricePreview();
-  }
-});
 </script>
 <script>
 	document.addEventListener("DOMContentLoaded", () => {
@@ -1880,13 +1985,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const supabaseUrl = "https://kogawaehnkegmtnyiwzu.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvZ2F3YWVobmtlZ210bnlpd3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjIyNDUsImV4cCI6MjA5NjIzODI0NX0.TZkcaatq1FVeRPvhWUqE2td4iwTFVHxjktpsL6MhK8E";
 
-    window.supabaseClient = window.supabase.createClient(
-        supabaseUrl,
-        supabaseKey
-    );
-window.sb = window.supabaseClient;
-    console.log("SUPABASE READY:", window.supabaseClient);
+   if (!window.supabase) {
+  console.error("Supabase library not loaded");
+} else {
+  window.supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+  );
 
+  window.sb = window.supabaseClient;
+
+  console.log("SUPABASE READY");
+}
 // -------------------------
 // MOBILE MENU
 // -------------------------
@@ -1965,10 +2075,12 @@ console.log("loginBtn:", loginBtn);
 console.log("loginSubmitBtn:", loginSubmitBtn);
 
 // OPEN MODAL
-loginBtn?.addEventListener("click", () => {
+if (loginBtn && loginModal) {
+  loginBtn.addEventListener("click", () => {
     console.log("OPEN MODAL CLICK");
-    loginModal?.classList.add("active");
-});
+    loginModal.classList.add("active");
+  });
+}
 
 // LOGIN ACTION
 loginSubmitBtn?.addEventListener("click", () => {
@@ -2096,6 +2208,28 @@ function openPanel(type){
 
     switch(type){
 
+	case "BUY ADDONS":
+
+    title.innerText = "PMB Add-ons";
+
+    let html = `<h3>Enhance your mailbox</h3>`;
+
+    PMB_ADDONS.forEach(addon => {
+        html += `
+        <div class="addon-card">
+            <h4>${addon.name}</h4>
+            <p>$${addon.price}</p>
+            <button onclick="buyAddon('${addon.id}')">
+                Buy Now
+            </button>
+        </div>
+        `;
+    });
+
+    content.innerHTML = html;
+
+break;		
+			
         case "office":
 
                 title.innerText = "Office Rental";
