@@ -130,8 +130,16 @@ button:active {
 <div class="admin-wrap">
 
     <div class="admin-list">
-        <p>PMB LIST</p>
-        <input id="pmbSearch" placeholder="Search PMB" oninput="filterPMBs()">
+        <p>PMB's Click to edit</p>	
+		  <!-- 🔎 SEARCH BOX -->
+    <input
+        id="pmbSearch"
+        placeholder="Search PMB (e.g. PMB140)"
+        oninput="filterPMBs()"
+        style="width:80%; padding:6px; margin-bottom:8px; border-radius:8px; border:none;"
+    />
+		
+		
         <div id="listContainer"></div>
     </div>
 
@@ -200,6 +208,19 @@ async function loadMailboxes() {
     renderList(allMailboxes);
 }
 
+	function filterPMBs() {
+    const q = (document.getElementById("pmbSearch")?.value || "")
+        .trim()
+        .toUpperCase();
+
+    if (!q) return renderList(allMailboxes);
+
+    const filtered = allMailboxes.filter(b =>
+        String(b.pmb_number).toUpperCase().includes(q)
+    );
+
+    renderList(filtered);
+}
 /* =====================
    LIST
 ===================== */
