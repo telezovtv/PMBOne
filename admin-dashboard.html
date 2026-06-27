@@ -208,15 +208,20 @@ async function loadMailboxes() {
     renderList(allMailboxes);
 }
 
-	function filterPMBs() {
-    const q = (document.getElementById("pmbSearch")?.value || "")
-        .trim()
-        .toUpperCase();
+function filterPMBs() {
+    const input = document.getElementById("pmbSearch");
+    if (!input) return;
 
-    if (!q) return renderList(allMailboxes);
+    const q = (input.value || "").trim().toUpperCase();
+
+    // ✅ if empty → restore full list
+    if (!q) {
+        renderList(allMailboxes);
+        return;
+    }
 
     const filtered = allMailboxes.filter(b =>
-        String(b.pmb_number).toUpperCase().includes(q)
+        String(b.pmb_number || "").toUpperCase().includes(q)
     );
 
     renderList(filtered);
@@ -371,7 +376,13 @@ async function attachTX() {
 
     loadMailboxes();
 }
+const msg =
+    selectedMailbox?.client_message &&
+    selectedMailbox.client_message.trim().length > 0
+        ? selectedMailbox.client_message
+        : "No Customer messages";
 
+document.getElementById("clientMessageBox").innerText = msg;
 /* =====================
    INIT
 ===================== */
