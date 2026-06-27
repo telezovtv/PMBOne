@@ -374,13 +374,46 @@ async function attachTX() {
 
     loadMailboxes();
 }
-const msg =
-    selectedMailbox?.client_message &&
-    selectedMailbox.client_message.trim().length > 0
-        ? selectedMailbox.client_message
-        : "No Customer messages";
+	function getAdminMessage() {
+    return (document.getElementById("adminMessage")?.value || "").trim();
+}
+	async function sendMailNotice() {
+    if (!selectedMailbox) return;
 
-document.getElementById("clientMessageBox").innerText = msg;
+    const msg = getAdminMessage();
+    if (!msg) return alert("Write a message");
+
+    const { error } = await sb.from("mailboxes")
+        .update({
+            mail_waiting: true,
+            admin_notes: msg
+        })
+        .eq("id", selectedMailbox.id);
+
+    if (error) return alert(error.message);
+
+    loadMailboxes();
+}
+function updateClientMessageView(box) {
+    const msg =
+        box?.client_message?.trim?.() ||
+        "No Customer messages";
+
+    document.getElementById("clientMessageBox").innerText = msg;
+}
+	function selectMailbox(box) {
+    selectedMailbox = box;
+
+    document.getElementById("selectedBox").innerText = box.pmb_number;
+
+    document.getElementById("e_name").value = box.customer_name || "";
+    document.getElementById("e_email").value = box.customer_email || "";
+    document.getElementById("e_phone").value = box.customer_phone || "";
+    document.getElementById("e_status").value = box.account_status || "";
+    document.getElementById("e_notes").value = box.admin_notes || "";
+
+    updateClientMessageView(box);
+}
 /* =====================
    INIT
 ===================== */
