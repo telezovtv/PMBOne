@@ -1402,7 +1402,7 @@ color:#E6E6FA;
 </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Home</a>
+                    <a href="#" class="nav-link" onclick="openPanel('BUY ADDONS')">PMB 🛒-💰</a>
                 </li>
                     
               <li class="nav-item">
@@ -1620,7 +1620,15 @@ const STRIPE_PRICING = {
   BUSINESS: { 6: 140, 12: 240, 24: 400 },
   VIP: { 6: 175, 12: 300, 24: 480 }
 };
-
+	
+const PMB_ADDONS = [
+  {
+    id: "extra",
+    name: "EXTRA Handling",
+    price: 10,
+    price_id: "price_1TmD98CnUWCqsmAmShhBpB2G"
+  }
+];
 // -------------------------
 // PRICE PREVIEW
 // -------------------------
@@ -1697,6 +1705,55 @@ function pmbGoStep2() {
 
   console.log("STEP 2 OPENED");
 }
+
+async function buyAddon(addonId) {
+  const addon = PMB_ADDONS.find(a => a.id === addonId);
+  if (!addon) return alert("Addon not found");
+
+  const res = await fetch("YOUR_SUPABASE_FUNCTION_URL/create-checkout-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      items: [
+        {
+          price: addon.price_id,
+          quantity: 1
+        }
+      ]
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.url) {
+    window.location.href = data.url;
+  }
+}
+
+function renderAddons() {
+  const box = document.getElementById("addonsContainer");
+  if (!box) return;
+
+  box.innerHTML = PMB_ADDONS.map(a => `
+    <button onclick="buyAddon('${a.id}')"
+      style="margin:5px;padding:10px;background:#4cff88;border:none;">
+      + ${a.name} ($${a.price})
+    </button>
+  `).join("");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const type = document.getElementById("su_type");
+  const term = document.getElementById("su_term");
+
+  if (type && term) {
+    type.addEventListener("change", updatePricePreview);
+    term.addEventListener("change", updatePricePreview);
+    updatePricePreview();
+  }
+
+  renderAddons();
+});
 
 // -------------------------
 // BACK BUTTON
@@ -2096,6 +2153,28 @@ function openPanel(type){
 
     switch(type){
 
+	case "BUY ADDONS":
+
+    title.innerText = "PMB Add-ons";
+
+    let html = `<h3>Enhance your mailbox</h3>`;
+
+    PMB_ADDONS.forEach(addon => {
+        html += `
+        <div class="addon-card">
+            <h4>${addon.name}</h4>
+            <p>$${addon.price}</p>
+            <button onclick="buyAddon('${addon.id}')">
+                Buy Now
+            </button>
+        </div>
+        `;
+    });
+
+    content.innerHTML = html;
+
+break;		
+			
         case "office":
 
                 title.innerText = "Office Rental";
