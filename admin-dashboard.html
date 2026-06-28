@@ -192,8 +192,7 @@ No PMB messages
 <button onclick="updatePassword()">🔑 Password</button>	
         <button onclick="cryptoPaid()">💰Crypto Paid</button>
         <button onclick="cryptoPending()">⏳Pending</button>
-        <button onclick="stripePaid()">💳Stripe Paid</button>
-        <button onclick="attachTX()">🔗Add TXID</button>		
+        <button onclick="stripePaid()">💳Stripe Paid</button>	
 		</div>
 
 </div>
@@ -347,16 +346,7 @@ async function stripePaid() {
 
     loadMailboxes();
 }	
-	async function attachTX() {
-    const tx = prompt("TX ID:");
-    if (!tx) return;
 
-    await sb.from("mailboxes")
-    .update({ crypto_txid: tx })
-    .eq("id", selectedMailbox.id);
-
-    loadMailboxes();
-}
 /* =====================
    SELECT BOX
 ===================== */
