@@ -227,7 +227,7 @@ if (!admin) {
 ===================== */
 let selectedMailbox = null;
 let allMailboxes = [];
-
+let selectedReservation = null;
 /* =====================
    LOAD LIST
 ===================== */
@@ -259,6 +259,8 @@ async function loadMailboxes() {
 
     renderList(filtered);
 }
+	
+	
 	function renderList(data) {
 
     const container = document.getElementById("listContainer");
@@ -318,22 +320,42 @@ function renderList(data) {
 }
 
 async function cryptoPaid() {
-    await sb.from("mailboxes")
-    .update({
-        crypto_status:"PAID",
-        crypto_confirmed_at:new Date().toISOString()
-    })
-    .eq("id", selectedMailbox.id);
 
-    loadMailboxes();
+    if (!selectedReservation) return;
+
+    await sb
+        .from("crypto_reservations")
+        .update({
+            status: "PAID"
+        })
+        .eq("id", selectedReservation.id);
+
+    loadReservation(selectedReservation.email);
 }
 
 async function cryptoPending() {
-    await sb.from("mailboxes")
-    .update({ crypto_status:"PENDING" })
-    .eq("id", selectedMailbox.id);
 
-    loadMailboxes();
+    if (!selectedReservation) {
+        alert("No crypto reservation found for this PMB");
+        return;
+    }
+
+    const { error } = await sb
+        .from("crypto_reservations")
+        .update({
+            status: "PENDING"
+        })
+        .eq("id", selectedReservation.id);
+
+    if (error) {
+        console.error(error);
+        alert("Update failed");
+        return;
+    }
+
+    alert("Marked as PENDING");
+
+    loadReservation(selectedReservation.email);
 }
 
 async function stripePaid() {
@@ -346,7 +368,19 @@ async function stripePaid() {
 
     loadMailboxes();
 }	
+async function loadReservation(email) {
 
+    const { data } = await sb
+        .from("crypto_reservations")
+        .select("*")
+        .eq("email", email)
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+    selectedReservation = data?.[0] || null;
+
+    console.log("RESERVATION:", selectedReservation);
+}
 /* =====================
    SELECT BOX
 ===================== */
@@ -356,7 +390,7 @@ function selectMailbox(box) {
     const fresh = allMailboxes.find(b => b.id === box.id);
 
     selectedMailbox = fresh || box;
-
+ loadReservation(box.customer_email); // 🔥 IMPORTANT FIX
     document.getElementById("selectedBox").innerText = selectedMailbox.pmb_number;
 
     document.getElementById("e_name").value = selectedMailbox.customer_name || "";
