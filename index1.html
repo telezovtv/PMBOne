@@ -1564,7 +1564,7 @@ color:#E6E6FA;
 </div>
 					 					 
 </div>
-            <ul class="nav-menu"><div class="addons-grid" id="addonsGrid"></div>
+            <ul class="nav-menu">
                 <li class="nav-item">
                     <a href="#" class="nav-link" onclick="openPanel('BUY ADDONS')">PMB 🛒-💰</a>
                 </li>
@@ -2491,27 +2491,19 @@ function openPanel(type){
 
     switch(type){
 
-	case "BUY ADDONS":
+case "BUY ADDONS":
 
     title.innerText = "PMB Add-ons";
 
-    let html = `<h3>Enhance your mailbox</h3>`;
+    content.innerHTML = `
+        <h3>Enhance your mailbox experience</h3>
 
-    PMB_ADDONS.forEach(addon => {
-        html += `
-        <div class="addon-card">
-            <h4>${addon.name}</h4>
-            <p>$${addon.price}</p>
-            <button onclick="buyAddon('${addon.id}')">
-                Buy Now
-            </button>
-        </div>
-        `;
-    });
+        <div class="addons-grid" id="addonsGrid"></div>
+    `;
 
-    content.innerHTML = html;
+    renderAddons();
 
-break;		
+break;	
 			
         case "office":
 
