@@ -1,0 +1,2808 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MailboxCity | PMBONE.com | Private Mailboxes & Virtual Business Address</title>
+
+<meta name="description"
+content="MailboxCity offers secure private mailboxes, virtual business addresses, package receiving, mail forwarding, and online mailbox management. PMB•ONE | pmbone.com">
+
+<meta name="keywords"
+content="private mailbox, mailbox rental, virtual mailbox, business address, mail forwarding, package receiving, PMB, mailboxcity, pmbone, pmb1">
+
+<meta name="author"
+content="MailboxCity">
+
+<meta name="robots"
+content="index,follow">
+<!-- Favicons -->
+
+<link rel="icon"
+      href="https://pmbone.com/favicon/favicon.ico"
+      sizes="any">
+<link id="dynamic-favicon"
+      rel="icon"
+      type="image/png"
+      href="https://pmbone.com/favicon/favicon.png">
+
+<script src="https://pmbone.com/favicon/favicon.js" defer></script>
+
+<style>
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        nav {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 28px 24px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            transform: translateX(-50%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            color: #00f2fe;
+        }
+
+        .nav-link:hover::before {
+            width: 70%;
+        }
+
+        .dropdown-toggle::after {
+            content: '▼';
+            font-size: 9px;
+            margin-left: 6px;
+            opacity: 0.7;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(20, 20, 20, 0.98);
+            backdrop-filter: blur(20px);
+            min-width: 240px;
+            list-style: none;
+            padding: 12px 0;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item:hover > .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            position: relative;
+        }
+
+        .dropdown-link {
+            display: block;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .dropdown-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 0%;
+            width: 3px;
+            background: linear-gradient(180deg, #00f2fe, #4facfe);
+            transition: height 0.3s ease;
+        }
+
+        .dropdown-link:hover {
+            background: rgba(0, 242, 254, 0.05);
+            color: #00f2fe;
+            padding-left: 32px;
+        }
+
+        .dropdown-link:hover::before {
+            height: 60%;
+        }
+
+        .dropdown-item .dropdown-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-item .dropdown-toggle::after {
+            content: '›';
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-item:hover > .dropdown-toggle::after {
+            transform: translateX(4px);
+        }
+
+        .dropdown-menu .dropdown-menu {
+            left: 100%;
+            top: -12px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape1 {
+            width: 500px;
+            height: 500px;
+            background: #00f2fe;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 400px;
+            height: 400px;
+            background: #4facfe;
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -7s;
+        }
+
+        .shape3 {
+            width: 300px;
+            height: 300px;
+            background: #00d4ff;
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    .hero-logo{
+    position:absolute;
+    left:50%;
+    top:22px; 
+    transform:translateX(-50%);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    white-space:nowrap;	
+    font-size:30px;
+    font-weight:800;
+    line-height:1;
+    background:linear-gradient(
+        90deg,
+        #ffffff 0%,
+        #dffeff 20%,
+        #00f2fe 50%,
+        #b9fbff 80%,
+        #ffffff 100%
+    );
+
+    background-size:220% 100%;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    -webkit-text-stroke:0.9px #dffeff;
+    text-shadow:
+        0 0 1px rgba(255,255,255,.6),
+        0 0 6px rgba(0,242,254,.35);
+
+    animation:
+        fadeInUp 1s ease-out .4s backwards,
+        iceSweep 2s ease-in-out 1.2s 1 forwards;
+}
+
+@keyframes iceSweep{
+
+    0%{
+        background-position:0% 50%;
+        filter:brightness(1.25);
+    }
+
+    50%{
+        background-position:100% 50%;
+        filter:brightness(.78);
+    }
+
+    100%{
+        background-position:0% 50%;
+        filter:brightness(1);
+    }
+
+}
+
+/* ---------- LIVE DOT ---------- */
+.i-dot{
+
+    display:inline-block;
+
+    width:5px;
+    height:5px;
+
+    margin:0 5px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(circle at 35% 35%,
+            #ffffff 0%,
+            #dffeff 30%,
+            #7ffcff 60%,
+            #00d8ff 100%);
+
+    border:1px solid rgba(255,255,255,.9);
+
+    box-shadow:
+        0 0 2px #fff,
+        0 0 4px #bfffff,
+        0 0 8px #00f2fe,
+        0 0 12px #00f2fe;
+
+    animation:
+        idleDot 8s infinite;
+}
+	@keyframes idleDot{
+
+    /* sleeping */
+
+    0%,48%,100%{
+        transform:translateY(0);
+    }
+
+    /* wake */
+
+    52%{
+        transform:translateY(-2px);
+    }
+
+    56%{
+        transform:translateY(2px);
+    }
+
+    60%{
+        transform:translateY(-1px);
+    }
+
+    64%{
+        transform:translateY(0);
+    }
+}
+        .hero-subtitle {
+            font-size: 16px;
+            color: #00f2fe;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 28px;
+            background: linear-gradient(135deg, #ffffff 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 48px;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.8s backwards;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #0a0a0a;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: #00f2fe;
+            background: rgba(0, 242, 254, 0.1);
+            transform: translateY(-3px);
+        }
+/* ==========================
+   PMB LOGISTICS FOOTER
+========================== */
+
+#pmb-footer{
+    width:100%;
+    padding:0px 1px 0px;
+    background:#transparent;
+    border-top:1px solid #222;
+    overflow:hidden;
+    position:relative;
+}
+
+/* ==========================
+   PMB WALL
+========================== */
+#wallWrap{
+
+    width:100%;
+    overflow:hidden;
+}
+
+
+#pmbWall{
+
+    display:grid;
+
+    grid-template-columns:repeat(60,1fr);
+
+    gap:1px;
+
+    padding:1px 0;
+
+    width:100%;          /* design width */
+	height: 132px;
+
+}
+
+.pmb{
+
+    height:10px;
+
+    background:#1a1a1a;
+
+    color:#444;
+
+    font-size:6px;
+
+    font-family:Montserrat,sans-serif;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:1px;
+
+    transition:.25s;
+
+}
+
+.pmb.active{
+
+    background:#00f2fe;
+
+    color:#000;
+
+    box-shadow:
+        0 0 4px #00f2fe,
+        0 0 8px #00f2fe;
+
+}
+
+/* ==========================
+   SCANNER LINE
+========================== */
+
+#scanner{
+    position:absolute;
+
+    top:0;
+    left:0;
+   animation: scanMove 6s linear infinite;
+
+}
+	@keyframes scanMove{
+    0%   { transform: translate(0px, 0px); }
+    25%  { transform: translate(200px, 0px); }
+    50%  { transform: translate(400px, 0px); }
+    75%  { transform: translate(200px, 0px); }
+    100% { transform: translate(0px, 0px); }
+}
+	#scanLine{
+    position:relative;
+    width:1.1px;
+    height:101px;
+    border-radius:8px;
+
+    background:linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,60,60,.95),
+        transparent
+    );
+
+    box-shadow:
+        0 0 3px #ff2d2d,
+        0 0 8px rgba(255,40,40,.6),
+        0 0 18px rgba(255,40,40,.25);
+
+}
+
+/* red ball */
+
+#xtubeBall{
+    position:absolute;
+
+    left:50%;
+    top:-6px;
+
+    transform:translateX(-50%);
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+    background:#ff0000;
+
+    box-shadow:
+        0 0 4px #ff0000,
+        0 0 10px rgba(255,0,0,.8);
+}
+/* scanner trail */
+
+#xtubeBall::after{
+    content:"";
+    position:absolute;
+
+    left:50%;
+    top:-130px;
+
+    transform:translateX(-50%);
+
+    width:.2px;
+    height:130px;
+
+    background:linear-gradient(
+        to top,
+        rgba(255,0,0,.25),
+        transparent
+    );
+
+    filter:blur(.8px);
+    opacity:.18;
+}
+
+/* ==========================
+   STATUS
+========================== */
+
+#footerStatus{
+
+    text-align:center;
+
+    font:600 12px Montserrat,sans-serif;
+
+    color:#00f2fe;
+
+    letter-spacing:1px;
+
+    min-height:16px;
+
+    text-shadow:0 0 6px #00f2fe55;
+
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width:700px){
+
+    #pmbWall{
+
+        grid-template-columns:repeat(20,1fr);
+
+    }
+
+    .pmb{
+
+        font-size:6px;
+        height:16px;
+
+    }
+
+}
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+    animation: bounce 2s infinite;
+        }
+/* LEFT CORNER */
+.scroll-indicator.left {
+    left: 15px;
+}
+
+/* RIGHT CORNER */
+.scroll-indicator.right {
+    right: 5px;
+}
+
+/* remove centering behavior */
+.scroll-indicator.left,
+.scroll-indicator.right {
+    transform: none;
+}
+        .scroll-indicator::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 40px;
+            position: relative;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 8px;
+            background: #00f2fe;
+            border-radius: 2px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scrollDot {
+            0% { top: 8px; opacity: 1; }
+            100% { top: 24px; opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .hero-description {
+                font-size: 18px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+.mobile-toggle{
+display:none;
+font-size:32px;
+cursor:pointer;
+color:#fff;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.75);
+backdrop-filter:blur(10px);
+z-index:5000;
+}
+
+.modal-content{
+width:90%;
+max-width:420px;
+padding:30px;
+border-radius:20px;
+background:#121212;
+border:1px solid rgba(255,255,255,.1);
+display:flex;
+flex-direction:column;
+gap:15px;
+position:relative;
+}
+#step1, #step2 {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+	#step3 {
+    display:none;
+    flex-direction:column;
+    gap:15px;
+}
+.modal-content h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.modal-content input,
+.modal-content select{
+padding:14px;
+border:none;
+border-radius:10px;
+background:#1f1f1f;
+color:white;
+}
+
+.modal.active {
+    display: flex;
+}
+	#reservationInfo{
+    background:#1f1f1f;
+    padding:15px;
+    border-radius:10px;
+    color:white;
+}
+
+#idNotice{
+    color:#ccc;
+    text-align:center;
+}
+.close-modal{
+position:absolute;
+top:10px;
+right:15px;
+font-size:30px;
+cursor:pointer;
+}
+
+@media(max-width:768px){
+
+.mobile-toggle{
+display:block;
+}
+
+.nav-container{
+padding:0 20px;
+}
+
+.nav-menu{
+position:absolute;
+top:100%;
+left:0;
+width:100%;
+background:#111;
+display:none;
+flex-direction:column;
+gap:0;
+}
+
+.nav-menu.active{
+display:flex;
+}
+
+.nav-link{
+padding:18px;
+}
+
+.hero-title{
+font-size:38px;
+}
+
+.hero-description{
+font-size:16px;
+}
+
+}
+#pmbBanner {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f1f1f;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+#pmbBanner button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}	
+	.side-panel{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:380px;
+    max-width:92%;
+    height:100vh;
+
+    background:rgba(10,10,10,.97);
+    backdrop-filter:blur(20px);
+
+    border-left:1px solid rgba(255,255,255,.1);
+
+    transition:right .35s ease;
+
+    z-index:99999;
+}
+
+.side-panel.active{
+    right:0;
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:20px;
+
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.panel-header h2{
+    margin:0;
+    color:#00f2fe;
+}
+
+.panel-header button{
+    background:none;
+    border:none;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.panel-content{
+    padding:20px;
+    line-height:1.8;
+
+    color:rgba(255,255,255,.65);
+
+    transition:all .35s ease;
+}
+
+/* Paragraphs */
+.panel-content p{
+    color:rgba(255,255,255,.60);
+
+    transition:
+        color .35s ease,
+        text-shadow .35s ease,
+        transform .35s ease;
+
+    cursor:default;
+}
+
+/* Desktop hover */
+.panel-content p:hover{
+    color:rgba(255,255,255,.98);
+
+    text-shadow:
+        0 0 8px rgba(0,242,254,.45),
+        0 0 16px rgba(0,242,254,.20);
+
+    transform:translateX(4px);
+
+    animation:textPulse 1.5s ease infinite;
+}
+
+/* Mobile tap / text selection */
+.panel-content p:active{
+    color:#fff;
+
+    text-shadow:
+        0 0 10px rgba(0,242,254,.6);
+
+    transform:translateX(4px);
+}
+
+@keyframes textPulse{
+
+    0%,100%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:.8;
+    }
+}
+	.panel-content h3{
+    color:#00f2fe;
+
+    margin-top:20px;
+    margin-bottom:10px;
+
+    transition:all .35s ease;
+}
+
+.panel-content h3:hover{
+    text-shadow:
+        0 0 10px rgba(0,242,254,.7),
+        0 0 20px rgba(0,242,254,.3);
+
+    letter-spacing:.5px;
+}
+	.side-panel.active .panel-content{
+    animation:panelReveal .6s ease;
+}
+
+@keyframes panelReveal{
+
+    from{
+        opacity:0;
+        transform:translateX(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+	.site-footer{
+    text-align:center;
+    padding:20px 15px;
+    background:rgba(0,0,0,0.15);
+    backdrop-filter:blur(10px);
+}
+
+.hero-description-small{
+    font-size:10px;
+    color:rgba(255,255,255,0.5);
+    line-height:1.5;
+    margin:0;
+    opacity:.55;
+    animation: footerGlow 8s infinite;
+}
+
+@keyframes footerGlow{
+    0%,90%,100%{
+        opacity:.45;
+    }
+
+    94%{
+        opacity:.9;
+        text-shadow:
+            0 0 6px rgba(0,242,254,.35),
+            0 0 12px rgba(0,242,254,.15);
+    }
+}
+	.vip-card{
+
+    padding:18px;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,215,0,.10),
+            rgba(255,180,0,.04)
+        );
+
+    border:1px solid rgba(255,215,0,.35);
+
+    box-shadow:
+        0 0 20px rgba(255,215,0,.10);
+
+    margin-bottom:18px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.vip-card::before{
+
+    content:'VIP';
+
+    position:absolute;
+
+    top:10px;
+    right:12px;
+
+    font-size:10px;
+    letter-spacing:2px;
+
+    color:rgba(255,215,0,.7);
+}
+
+.vip-card h3{
+
+    color:#ffd700;
+
+    text-shadow:
+        0 0 8px rgba(255,215,0,.35);
+
+    margin-top:0;
+}
+
+.vip-card:hover{
+
+    box-shadow:
+        0 0 25px rgba(255,215,0,.18),
+        0 0 40px rgba(255,215,0,.08);
+
+    transform:translateY(-2px);
+
+    transition:all .35s ease;
+}
+		.mailboxcity-sign{
+      position:absolute;
+
+    margin-top: 5px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    display:flex;
+    gap:2px;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+
+    height:16px;
+    line-height:16px;
+}
+
+
+.mailboxcity-sign span{
+
+    color:transparent;
+    -webkit-text-fill-color:#0a0b0c;
+
+    -webkit-text-stroke:0.9px #dffeff;
+
+    text-shadow:
+        0 0 1px #00f2fe,
+        0 0 2px #00f2fe,
+        0 0 4px #00f2fe,
+        0 0 8px #00f2fe,
+        0 0 16px #00f2fe,
+        0 0 32px rgba(0,242,254,.7);
+
+    animation:
+        neonColor 22s infinite,
+        tubeFlicker 8s infinite;
+}
+@keyframes neonColor{
+
+    0%,65%{
+
+        -webkit-text-stroke-color:#e3feff;
+
+        text-shadow:
+            0 0 1px #f3e2ff,
+            0 0 3px #f3e2ff,
+            0 0 6px #f3e2ff,
+            0 0 12px #f3e2ff,
+            0 0 24px rgba(168,85,255,.9);
+    }
+
+    70%,80%{
+
+        -webkit-text-stroke-color:#dfffff;
+
+        text-shadow:
+            0 0 1px #00f2fe,
+            0 0 3px #00f2fe,
+            0 0 6px #00f2fe,
+            0 0 12px #00f2fe,
+            0 0 24px rgba(0,242,254,.9);
+    }
+
+    84%,88%{
+
+        -webkit-text-stroke-color:#fff0d0;
+
+        text-shadow:
+            0 0 1px #FFD566,
+            0 0 3px #EBB866,
+            0 0 6px #E6BE8A,
+            0 0 12px #F5D760,
+            0 0 24px rgba(255,176,0,.9);
+    }
+
+    100%{
+
+        -webkit-text-stroke-color:#f3e2ff;
+
+        text-shadow:
+            0 0 1px #E6E6FA,
+            0 0 3px #D8BFD8,
+            0 0 6px #E6E6FA,
+            0 0 12px #D8BFD8,
+            0 0 24px rgba(168,85,255,.9);
+    }
+}
+	
+@keyframes tubeFlicker{
+
+    0%,90%,100%{
+        opacity:1;
+    }
+
+    91%{
+        opacity:.15;
+    }
+
+    92%{
+        opacity:1;
+    }
+
+    93%{
+        opacity:.35;
+    }
+
+    94%{
+        opacity:1;
+    }
+
+    95%{
+        opacity:.55;
+    }
+
+    96%{
+        opacity:1;
+    }
+}
+span:nth-child(1){animation-delay:.1s,2.7s;}
+span:nth-child(2){animation-delay:.4s,5.1s;}
+span:nth-child(3){animation-delay:.7s,1.6s;}
+span:nth-child(4){animation-delay:1s,4.2s;}
+span:nth-child(5){animation-delay:1.3s,6.3s;}
+span:nth-child(6){animation-delay:1.6s,3.4s;}
+span:nth-child(7){animation-delay:1.9s,5.8s;}
+span:nth-child(8){animation-delay:2.2s,2.1s;}
+span:nth-child(9){animation-delay:2.5s,4.7s;}
+span:nth-child(10){animation-delay:2.8s,1.3s;}
+span:nth-child(11){animation-delay:3.1s,6.8s;}
+
+.pmb-logo{
+    position:relative;
+top: 2;
+    width:210px;
+    height:76px;
+
+    margin:auto;
+}
+.one-o{
+
+    display:inline-block;
+    
+    background:linear-gradient(
+        90deg,
+        #b9fbff 0%,
+        #dffeff 20%,
+        #00f2fe 50%,
+        #b9fbff 80%,
+        #ffffff 100%
+    );
+
+    background-size:220% 100%;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+
+    -webkit-text-stroke:0.9px #dffeff;
+    text-shadow:
+        0 0 1px rgba(255,255,255,.6),
+        0 0 6px rgba(0,242,254,.35);
+
+    animation:
+        fadeInUp 1s ease-out .4s backwards,
+        iceSweep 2s ease-in-out 1.2s 1 forwards,
+	    chargeO 8s infinite;
+}
+
+@keyframes iceSweep{
+
+    0%{
+        background-position:0% 50%;
+        filter:brightness(1.25);
+    }
+
+    50%{
+        background-position:100% 50%;
+        filter:brightness(.78);
+    }
+
+    100%{
+        background-position:0% 50%;
+        filter:brightness(1);
+    }
+
+}
+
+@keyframes chargeO{
+
+    0%,64%,100%{
+
+        filter:none;
+        transform:scale(1);
+
+    }
+
+    67%{
+		
+      67%{
+
+    -webkit-text-stroke-color:#e3feff;
+
+    text-shadow:
+        0 0 1px #f3e2ff,
+        0 0 2px #f3e2ff,
+        0 0 4px #9cfaff,
+        0 0 8px rgba(0,242,254,.45);
+
+    transform:scale(1.04);
+    }
+
+    72%{
+
+        transform:scale(1.1);
+color:#E6E6FA;
+        -webkit-text-stroke:.8px #violet;
+    }
+
+}
+	/* ===========================
+   PMB ADDON STORE
+=========================== */
+
+.addons-grid{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    margin-top:20px;
+}
+
+.addon-card{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.05),
+            rgba(255,255,255,.02)
+        );
+
+    border:1px solid rgba(0,242,255,.18);
+
+    backdrop-filter:blur(14px);
+
+    transition:.30s;
+
+    box-shadow:
+        inset 0 0 25px rgba(255,255,255,.03),
+        0 0 25px rgba(0,255,255,.06);
+}
+
+.addon-card:hover{
+
+    transform:translateY(-3px);
+
+    border-color:#28ecff;
+
+    box-shadow:
+        0 0 35px rgba(0,242,255,.25),
+        inset 0 0 35px rgba(0,255,255,.08);
+}
+
+/* ICON */
+
+.addon-icon{
+
+    width:82px;
+    height:82px;
+
+    flex:none;
+
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        radial-gradient(circle,#06303d,#081018);
+
+    border:1px solid rgba(0,255,255,.30);
+
+    box-shadow:
+        inset 0 0 20px rgba(0,255,255,.12),
+        0 0 20px rgba(0,255,255,.12);
+}
+
+.addon-icon img{
+
+    width:54px;
+    height:54px;
+
+    object-fit:contain;
+
+    filter:
+        drop-shadow(0 0 8px #00eaff);
+}
+
+/* TEXT */
+
+.addon-info{
+
+    flex:1;
+}
+
+.addon-title{
+
+    color:#fff;
+
+    font-size:28px;
+
+    font-weight:700;
+}
+
+.addon-desc{
+
+    color:#cfd8dc;
+
+    font-size:18px;
+
+    margin-top:6px;
+}
+
+.addon-price{
+
+    color:#22f2ff;
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+    text-align:right;
+}
+
+/* BUTTON */
+
+.addon-buy{
+
+    width:170px;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-size:21px;
+
+    font-weight:700;
+
+    color:#071014;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00f2fe,
+            #5ca8ff
+        );
+
+    box-shadow:
+        0 0 25px rgba(0,255,255,.35);
+
+    transition:.25s;
+}
+
+.addon-buy:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 0 45px rgba(0,255,255,.55);
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+</head>
+
+<body translate="no"><div id="pmbBanner" style="display:none;">
+    <span>📬 You have an active PMB reservation</span>
+
+    <button onclick="openActiveReservation()">
+        Open
+    </button>
+
+    <button onclick="closeBanner()">
+        ✖
+    </button>
+</div>
+  <nav id="navbar">
+        <div class="nav-container">
+			<div class="mobile-toggle" id="mobileToggle">
+☰
+</div>
+             <div class="logo pmb-logo">
+<div class="pmb-logo">
+
+    <div class="mailboxcity-sign">
+        <span>M</span>
+        <span>A</span>
+        <span>I</span>
+        <span>L</span>
+        <span>B</span>
+        <span>O</span>
+        <span>X</span>
+        <span>C</span>
+        <span>I</span>
+        <span>T</span>
+        <span>Y</span>
+    </div>
+
+		<div class="hero-logo">
+   
+    PMB<span class="i-dot"></span><span class="one-o">ONE</span>
+</div>
+
+</div>
+					 					 
+</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><div class="addons-grid" id="addonsGrid"></div>
+                    <a href="#" class="nav-link" onclick="openPanel('BUY ADDONS')">PMB 🛒-💰</a>
+                </li>
+                    
+              <li class="nav-item">
+    <a href="#" class="nav-link" onclick="openPanel('office')">Rent Office</a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" onclick="openPanel('pricing')">Pricing</a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" onclick="openPanel('contacts')">Contacts</a>
+</li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link dropdown-toggle">Private Mail Box</a>
+
+    <ul class="dropdown-menu">
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('mailbox')">
+               Mailbox Rental
+            </a>
+        </li>
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('virtual')">
+               Virtual Office
+            </a>
+        </li>
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('vip')">
+               VIP Mailbox Rental
+            </a>
+        </li>
+
+        <li class="dropdown-item">
+            <a href="#" class="dropdown-link"
+               onclick="openPanel('businessmail')">
+               Manage Business Mail
+            </a>
+        </li>
+
+    </ul>
+</li>
+				
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-background">
+            <div class="hero-grid"></div>
+            <div class="floating-shapes">
+                <div class="shape shape1"></div>
+                <div class="shape shape2"></div>
+                <div class="shape shape3"></div>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-subtitle">Establish Your Business Presence with a Real U.S. Street Address.</div>
+            <h1 class="hero-title">Mailbox Rental You Can Access Anytime</h1>
+            <p class="hero-description">
+                Real Street Address, Mail and Package Forwarding, Free Unlimited Online Storage.
+				Securely Access Your Virtual Mailbox.
+            </p>
+         <div class="hero-buttons">
+
+    <a href="#" class="btn btn-primary" id="signupBtn">
+        Start
+    </a>
+
+    <button class="btn btn-primary" id="loginBtn">
+        Login
+    </button>
+
+</div>
+        </div>
+
+        <div class="scroll-indicator left"></div>
+<div class="scroll-indicator right"></div>
+    </section>
+<footer class="site-footer"><p class="hero-description-small">
+PMB·ONE is a secure mailbox rental service, where individuals and businesses can receive mail and packages.
+Oue PMBs provides a real street address, which can be beneficial for receiving packages from all carriers (USPS, UPS, FedEx, etc.) and is often required for business registrations.
+Package Acceptance: PMBs can accept packages from all carriers, including UPS, FedEx,USPS with extra services such as package receiving and holding, mail forwarding.
+Flexibility and Access: Our location have extended hours, including weekends, offering more flexibility for access.
+Privacy and Professionalism: With an actual street address, which can enhance the professional image of a business. We also offering more privacy with VIP plan.
+Our PMBs provide more flexibility, services, and a real street address with secure mail receiving options, making them a versatile choice for both individuals and businesses.</p></footer>
+	<div id="pmb-footer">
+
+    <div id="wallWrap">
+    <div id="scanner">
+        <div id="scanLine"></div>
+        <div id="xtubeBall"></div>
+    </div>
+
+    <div id="pmbWall"></div>
+</div>
+
+    <div id="footerStatus">
+        PMB SYSTEM ONLINE
+    </div>
+
+</div>
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+
+    <div class="modal-content">
+
+        <span class="close-modal">&times;</span>
+
+        <h2>Mailbox Login</h2>
+
+        <input type="text" placeholder="Mailbox Number">
+        <input type="password" placeholder="Password">
+
+        <button class="btn btn-primary" id="loginSubmitBtn">
+            Login
+        </button>
+
+    </div>
+
+</div>
+<div class="modal" id="signupModal">
+    <div class="modal-content">
+
+       <div id="step1">
+    <h2>Open New Mailbox</h2>
+
+    <input id="su_name" type="text" placeholder="Full Name">
+    <input id="su_email" type="email" placeholder="Email">
+    <input id="su_password" type="password" placeholder="Create Password">
+
+    <select id="su_type">
+<option value="PRIVATE">Private Mailbox</option>
+<option value="BUSINESS">Business Mailbox</option>
+<option value="VIP">VIP Mailbox</option>
+    </select>
+
+    <select id="su_term">
+        <option value="6">6 Months</option>
+        <option value="12">12 Months</option>
+        <option value="24">24 Months</option>
+    </select>
+<div id="pricePreview" style="
+margin-top:10px;
+padding:10px;
+border-radius:8px;
+background:rgba(255,255,255,.08);
+font-size:14px;
+text-align:center;
+">
+Loading price...
+</div>
+            <button onclick="pmbGoStep2()" class="btn btn-primary">
+                Continue
+            </button>
+        </div>
+
+        <div id="step2" style="display:none;">
+            <h2>Choose Payment Method</h2>
+
+            <button onclick="selectPayment('card')">💳 Card</button>
+<button onclick="selectPayment('crypto')">₿ Crypto</button>
+<button onclick="selectPayment('cash')">🏢 Cash</button>
+
+            <hr>
+
+            <button onclick="pmbBackStep1()">Back</button>
+        </div>
+<div id="step3" style="display:none;">
+    <h2>Mailbox Reserved</h2>
+
+    <div id="reservationInfo"></div>
+
+    <p id="idNotice"></p>
+
+    <button onclick="closeSignupModal()">
+        Close
+    </button>
+</div>
+    </div>
+	
+</div>
+<div id="infoPanel" class="side-panel">
+
+    <div class="panel-header">
+
+        <h2 id="panelTitle">Info</h2>
+
+        <button onclick="closePanel()">✕</button>
+
+    </div>
+
+    <div id="panelContent" class="panel-content"></div>
+
+</div>
+	
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+let pmbSignupTemp = {};
+let countdownInterval;
+
+// -------------------------
+// PRICING (UI ONLY)
+// -------------------------
+
+const UI_PRICING = {
+  PRIVATE: { 6: 70, 12: 120, 24: 200 },
+  BUSINESS: { 6: 140, 12: 240, 24: 400 },
+  VIP: { 6: 175, 12: 300, 24: 480 }
+};	
+const PMB_ADDONS = [
+  {
+
+    id:"extra",
+
+    title:"EXTRA Handling",
+
+    description:"Large package handling & special care.",
+
+    price:"$10",
+
+    icon:"img/addons/box.png",
+
+    price_id:"price_1TmD98CnUWCqsmAmShhBpB2G"
+},
+
+{
+    id:"sms",
+
+    title:"SMS Notifications",
+
+    description:"Instant text alerts.",
+
+    price:"Soon",
+
+    icon:"img/addons/phone.png",
+
+    price_id:null
+},
+
+{
+    id:"scan",
+
+    title:"Mail Scan",
+
+    description:"Scan & email your envelopes.",
+
+    price:"Soon",
+
+    icon:"img/addons/laptop.png",
+
+    price_id:null
+},
+
+{
+    id:"tv",
+
+    title:"Digital Display",
+
+    description:"Future PMB TV integration.",
+
+    price:"Soon",
+
+    icon:"img/addons/tv.png",
+
+    price_id:null
+},
+
+{
+    id:"forward",
+
+    title:"Package Forwarding",
+
+    description:"Ship worldwide.",
+
+    price:"Soon",
+
+    icon:"img/addons/truck.png",
+
+    price_id:null
+},
+
+{
+    id:"secure",
+
+    title:"Priority Service",
+
+    description:"Fast processing queue.",
+
+    price:"Soon",
+
+    icon:"img/addons/shield.png",
+
+    price_id:null
+}
+
+];
+	
+// -------------------------
+// PRICE PREVIEW
+// -------------------------
+function updatePricePreview() {
+
+  const typeEl = document.getElementById("su_type");
+  const termEl = document.getElementById("su_term");
+  const box = document.getElementById("pricePreview");
+
+  if (!typeEl || !termEl || !box) return;
+
+  const type = typeEl.value;
+  const term = parseInt(termEl.value);
+
+  const total = UI_PRICING?.[type]?.[term];
+
+  if (!total) {
+    box.innerHTML = "Select plan";
+    return;
+  }
+
+  const monthly = (total / term).toFixed(2);
+
+  box.innerHTML = `
+    <b>${type} Mailbox</b><br>
+    ${term} Months<br>
+    <span style="font-size:18px;color:#4cff88">
+      Total: $${total}
+    </span><br>
+    <small>~ $${monthly}/month</small>
+  `;
+}
+
+// -------------------------
+// STEP NAVIGATION
+// -------------------------
+function showStep(step) {
+
+  ["step1", "step2", "step3"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  const target = document.getElementById(step);
+  if (target) target.style.display = "flex";
+}
+
+// -------------------------
+// STEP 1 → STEP 2
+// -------------------------
+function pmbGoStep2() {
+
+  const name = document.getElementById("su_name").value;
+  const email = document.getElementById("su_email").value;
+  const password = document.getElementById("su_password").value;
+  const type = document.getElementById("su_type").value;
+  const term = parseInt(document.getElementById("su_term").value);
+
+  if (!name || !email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  pmbSignupTemp = {
+    name,
+    email,
+    password,
+    mailbox_type: type,
+    mailbox_term: term
+  };
+
+  showStep("step2");
+  updatePricePreview();
+
+  console.log("STEP 2 OPENED");
+}
+
+async function buyAddon(addonId) {
+  const addon = PMB_ADDONS.find(a => a.id === addonId);
+  if (!addon) return alert("Addon not found");
+
+  try {
+    const res = await fetch("https://kogawaehnkegmtnyiwzu.supabase.co/functions/v1/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: [
+          {
+            price: addon.price_id,
+            quantity: 1
+          }
+        ]
+      })
+    });
+
+    const data = await res.json();
+
+    console.log("ADDON RESPONSE:", data);
+
+    if (!res.ok) {
+      alert(data.error || "Addon checkout failed");
+      return;
+    }
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("No checkout URL returned");
+    }
+
+  } catch (err) {
+    console.error("ADDON ERROR:", err);
+    alert("Network error - check console");
+  }
+}
+
+function renderAddons(){
+
+const grid=document.getElementById("addonsGrid");
+
+grid.innerHTML="";
+
+PMB_ADDONS.forEach(item=>{
+
+grid.innerHTML+=`
+
+<div class="addon-card">
+
+<div class="addon-icon">
+
+<img src="${item.icon}">
+
+</div>
+
+<div class="addon-info">
+
+<div class="addon-title">${item.title}</div>
+
+<div class="addon-desc">${item.description}</div>
+
+</div>
+
+<div>
+
+<div class="addon-price">${item.price}</div>
+
+<button
+class="addon-buy"
+
+${!item.price_id ? "disabled":""}
+
+onclick="buyAddon('${item.id}')">
+
+${item.price_id ? "Buy Now":"Coming Soon"}
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const type = document.getElementById("su_type");
+  const term = document.getElementById("su_term");
+
+  if (type && term) {
+    type.addEventListener("change", updatePricePreview);
+    term.addEventListener("change", updatePricePreview);
+    updatePricePreview();
+  }
+
+  renderAddons();
+});
+
+// -------------------------
+// BACK BUTTON
+// -------------------------
+function pmbBackStep1() {
+  showStep("step1");
+}
+
+// -------------------------
+// PAYMENT + STRIPE
+// -------------------------
+async function selectPayment(method) {
+
+  try {
+
+    pmbSignupTemp.payment_method = method;
+
+    const res = await fetch(
+      "https://kogawaehnkegmtnyiwzu.supabase.co/functions/v1/create-checkout-session",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: pmbSignupTemp.name,
+          email: pmbSignupTemp.email,
+          password: pmbSignupTemp.password,
+          mailbox_type: pmbSignupTemp.mailbox_type,
+          mailbox_term: pmbSignupTemp.mailbox_term,
+          payment_method: method
+        })
+      }
+    );
+
+const data = await res.json();
+
+console.log("CHECKOUT RESPONSE:", data);
+
+if (!res.ok) {
+  console.error("Payment error:", data);
+  alert(data?.error || "Payment failed");
+  return;
+}
+
+// =========================
+// 🟠 CRYPTO FLOW (STEP 3)
+// =========================
+if (data.crypto) {
+
+  showStep("step3");
+
+  const notice = document.getElementById("idNotice");
+  if (notice) {
+    notice.innerHTML = `
+      💰 Send crypto payment:<br><br>
+      <b>${data.wallet.coin}</b><br>
+      <b>${data.wallet.network}</b><br><br>
+      <span style="word-break:break-all;">
+        ${data.wallet.address}
+      </span>
+    `;
+  }
+
+  return; // ❌ STOP HERE (NO STRIPE REDIRECT)
+}
+
+// =========================
+// 💳 STRIPE FLOW (NORMAL)
+// =========================
+if (!data?.url) {
+  alert("Missing Stripe URL");
+  return;
+}
+
+showStep("step3");
+
+const notice = document.getElementById("idNotice");
+if (notice) {
+  notice.innerHTML =
+    method === "cash"
+      ? "🏢 Cash selected - wait for approval"
+      : "⚠️ Redirecting to Stripe...";
+}
+
+window.location.href = data.url;
+
+  } catch (err) {
+    console.error("selectPayment crashed:", err);
+    alert(err.message || "Payment crashed");
+  }
+}
+// -------------------------
+// RESERVATION DISPLAY
+// -------------------------
+function renderReservation(reservation) {
+
+  const box = document.getElementById("reservationInfo");
+  const notice = document.getElementById("idNotice");
+
+  if (box) {
+    box.innerHTML = `
+      <b>PMB:</b> ${reservation.pmb_number}<br>
+      <b>Name:</b> ${reservation.customer_name}<br>
+      <b>Email:</b> ${reservation.email}<br>
+      <b>Type:</b> ${reservation.mailbox_type}<br>
+      <b>Term:</b> ${reservation.mailbox_term} Months<br>
+    `;
+  }
+
+  if (notice) {
+    notice.innerHTML =
+      reservation.payment_method === "cash"
+        ? "🏢 Bring ID to office"
+        : "⚠️ Complete payment to activate";
+  }
+}
+
+// -------------------------
+// COUNTDOWN (OPTIONAL)
+// -------------------------
+function startCountdown(expiryTime) {
+
+  clearInterval(countdownInterval);
+
+  countdownInterval = setInterval(() => {
+
+    const now = Date.now();
+    const diff = expiryTime - now;
+
+    const notice = document.getElementById("idNotice");
+    if (!notice) return;
+
+    if (diff <= 0) {
+      clearInterval(countdownInterval);
+      notice.innerHTML = "❌ Reservation expired";
+      return;
+    }
+
+    const m = Math.floor(diff / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    notice.innerHTML = `⏳ ${m}m ${s}s left`;
+
+  }, 1000);
+}
+
+// -------------------------
+// MODAL CLOSE
+// -------------------------
+function closeSignupModal() {
+  document.getElementById("signupModal").classList.remove("active");
+}
+
+// -------------------------
+// RESTORE STATE
+// -------------------------
+window.onload = function () {
+
+  const saved = localStorage.getItem("pmb_checkout");
+  if (!saved) return;
+
+  const data = JSON.parse(saved);
+
+  const expire = 30 * 60 * 1000;
+  if (Date.now() - data.created_at > expire) {
+    localStorage.removeItem("pmb_checkout");
+    return;
+  }
+
+  window.activeReservation = data;
+
+  const banner = document.getElementById("pmbBanner");
+  if (banner) banner.style.display = "flex";
+};
+
+// -------------------------
+// OPEN ACTIVE
+// -------------------------
+function openActiveReservation() {
+
+  const r = window.activeReservation;
+  if (!r) return;
+
+  document.getElementById("signupModal").classList.add("active");
+  showStep("step3");
+
+  document.getElementById("reservationInfo").innerHTML = `
+    <b>PMB:</b> ${r.pmb_number}<br>
+    <b>Name:</b> ${r.customer_name}<br>
+    <b>Email:</b> ${r.email}<br>
+    <b>Type:</b> ${r.mailbox_type}<br>
+    <b>Term:</b> ${r.mailbox_term} Months<br>
+  `;
+
+  closeBanner();
+}
+
+// -------------------------
+// BANNER CLOSE
+// -------------------------
+function closeBanner() {
+  const b = document.getElementById("pmbBanner");
+  if (b) b.style.display = "none";
+}
+
+</script>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+
+    // -------------------------
+    // SUPABASE INIT (FIXED)
+    // -------------------------
+    const supabaseUrl = "https://kogawaehnkegmtnyiwzu.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvZ2F3YWVobmtlZ210bnlpd3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjIyNDUsImV4cCI6MjA5NjIzODI0NX0.TZkcaatq1FVeRPvhWUqE2td4iwTFVHxjktpsL6MhK8E";
+
+   if (!window.supabase) {
+  console.error("Supabase library not loaded");
+} else {
+  window.supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+  );
+
+  window.sb = window.supabaseClient;
+
+  console.log("SUPABASE READY");
+}
+// -------------------------
+// MOBILE MENU
+// -------------------------
+const mobileToggle = document.getElementById("mobileToggle");
+const navMenu = document.querySelector(".nav-menu");
+
+if (mobileToggle && navMenu) {
+    mobileToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+
+        // -------------------------
+        // CLEANUP EXPIRED MAILBOXES
+        // -------------------------
+        async function cleanupExpiredMailboxes() {
+
+            const now = new Date();
+
+            const { data, error } = await window.sb
+                .from("mailboxes")
+                .select("id, paid_until")
+                .eq("account_status", "ACTIVE");
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            for (const box of data) {
+
+                if (!box.paid_until) continue;
+
+                if (new Date(box.paid_until) < now) {
+
+                    await window.sb
+                        .from("mailboxes")
+                        .update({
+                            customer_name: null,
+                            customer_email: null,
+                            login_password: null,
+
+                            account_status: "FREE", // ✅ FIXED (was AVAILABLE)
+
+                            paid_until: null,
+
+                            status_history: [
+                                {
+                                    status: "FREE", // ✅ FIXED (was RESERVED)
+                                    time: new Date().toISOString()
+                                }
+                            ],
+
+                            admin_notes: "Auto-expired after term ended"
+                        })
+                        .eq("id", box.id);
+                }
+            }
+
+            console.log("EXPIRY CLEANUP DONE");
+        }
+
+        cleanupExpiredMailboxes();
+    });
+}
+
+// -------------------------
+// LOGIN POPUP
+// -------------------------
+
+console.log("DOM READY");
+
+const loginBtn = document.getElementById("loginBtn");
+const loginModal = document.getElementById("loginModal");
+const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+
+console.log("loginBtn:", loginBtn);
+console.log("loginSubmitBtn:", loginSubmitBtn);
+
+// OPEN MODAL
+if (loginBtn && loginModal) {
+  loginBtn.addEventListener("click", () => {
+    console.log("OPEN MODAL CLICK");
+    loginModal.classList.add("active");
+  });
+}
+
+// LOGIN ACTION
+loginSubmitBtn?.addEventListener("click", () => {
+    console.log("LOGIN SUBMIT CLICK");
+    loginMailbox();
+});
+
+// -------------------------
+// SIGNUP POPUP
+// -------------------------
+const signupBtn = document.getElementById("signupBtn");
+const signupModal = document.getElementById("signupModal");
+
+if (signupBtn && signupModal) {
+    signupBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        signupModal.classList.add("active");
+    });
+}
+
+// -------------------------
+// LOGIN FUNCTION
+// -------------------------
+window.loginMailbox = async function () {
+
+    try {
+
+        console.log("LOGIN STARTED");
+
+        const mailbox = document
+            .querySelector("#loginModal input[type='text']")
+            .value
+            .trim()
+            .toUpperCase();
+
+        const password = document
+            .querySelector("#loginModal input[type='password']")
+            .value
+            .trim();
+
+        console.log("INPUT:", mailbox, password);
+
+        // DEBUG CHECK (optional but fine)
+        const { data: testRows, error: testError } = await window.supabaseClient
+            .from('mailboxes')
+            .select('pmb_number, login_password')
+            .limit(10);
+
+        console.log("TEST ROWS:", testRows);
+        console.log("TEST ERROR:", testError);
+
+        const { data, error } = await window.supabaseClient
+            .from('mailboxes')
+            .select('*')
+            .eq('pmb_number', mailbox)
+            .eq('login_password', password)
+            .in('account_status', ['FREE', 'ACTIVE', 'VIP', 'RESERVED'])
+            .maybeSingle();
+
+        console.log("LOGIN RESULT:", data, error);
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        if (!data) {
+            alert("Invalid mailbox, password, or inactive account");
+            return;
+        }
+
+        localStorage.setItem("pmb_user", JSON.stringify(data));
+
+        console.log("STORED USER:", data);
+
+        window.location.href = "dashboard.html";
+
+    } catch (err) {
+        console.error("LOGIN ERROR:", err);
+        alert(err.message || "Login crashed");
+    }
+};
+
+// -------------------------
+// CLOSE MODALS
+// -------------------------
+    document.querySelectorAll(".close-modal")
+        .forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".modal")
+                    .forEach(m => m.classList.remove("active"));
+            });
+        });
+
+});
+	</script>	
+
+<script>
+	document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
+
+    toggle.addEventListener("click", (e) => {
+
+        if (window.innerWidth > 768) return;
+
+        e.preventDefault();
+
+        const item = toggle.closest(".nav-item");
+
+        item?.classList.toggle("open");
+    });
+
+});
+	</script>
+	<script>
+	function closePanel(){
+    document
+        .getElementById("infoPanel")
+        .classList.remove("active");
+}
+
+function openPanel(type){
+
+    const title = document.getElementById("panelTitle");
+    const content = document.getElementById("panelContent");
+
+    switch(type){
+
+	case "BUY ADDONS":
+
+    title.innerText = "PMB Add-ons";
+
+    let html = `<h3>Enhance your mailbox</h3>`;
+
+    PMB_ADDONS.forEach(addon => {
+        html += `
+        <div class="addon-card">
+            <h4>${addon.name}</h4>
+            <p>$${addon.price}</p>
+            <button onclick="buyAddon('${addon.id}')">
+                Buy Now
+            </button>
+        </div>
+        `;
+    });
+
+    content.innerHTML = html;
+
+break;		
+			
+        case "office":
+
+                title.innerText = "Office Rental";
+
+    content.innerHTML = `
+        <h3>Private Office Space</h3>
+
+        <p>
+            Fully furnished office solutions for individuals,
+            startups and established businesses.
+        </p>
+
+        <p>
+            ✓ Professional business address<br>
+            ✓ High-speed internet<br>
+            ✓ Mail handling services<br>
+            ✓ Flexible monthly terms
+        </p>
+
+        <p>
+            Contact us for current availability and pricing.
+        </p>
+    `;
+break;
+
+        case "pricing":
+
+            title.innerText = "Mailbox Pricing";
+
+    content.innerHTML = `
+        <h3>Current Plans</h3>
+
+        <p>
+            Private Mailbox — from $8.99/mo
+        </p>
+
+        <p>
+            Business Mailbox — from $16.99/mo
+        </p>
+
+        <p>
+            VIP Mailbox — from $20.99/mo
+        </p>
+
+        <p>
+            Longer terms provide better overall value.
+        </p>
+    `;
+break;
+
+        case "contacts":
+
+            title.innerText = "Contacts";
+
+            content.innerHTML = `
+                Call (718) 891-7654
+            `;
+        break;
+
+        case "mailbox":
+
+            title.innerText = "Private Mailbox Rental";
+
+    content.innerHTML = `
+        <h3>Secure Mail Receiving</h3>
+
+        <p>
+            Receive private personal or business mail at a real street address.
+        </p>
+
+        <p>
+            ✓ Private Mailboxes<br>
+            ✓ Business Mailboxes<br>
+            ✓ VIP Mailbox Services
+        </p>
+
+        <p>
+            Plans available for 6, 12 and 24 months.
+        </p>
+    `;
+break;
+
+        case "virtual":
+
+            title.innerText = "Virtual Office";
+
+            content.innerHTML = `
+                Business address and mail handling.
+            `;
+        break;
+
+        case "vip":
+
+             title.innerText = "VIP Mailbox";
+
+    content.innerHTML = `
+
+        <div class="vip-card">
+
+            <h3>VIP Mailbox Service</h3>
+
+            <p>
+                Premium private mailbox solution for business owners,
+                executives and clients requiring enhanced service.
+            </p>
+
+            <p>
+                ★ Priority mail handling<br>
+                ★ Package notifications<br>
+                ★ Premium support<br>
+                ★ Extended storage options
+            </p>
+
+        </div>
+
+        <p>
+            VIP members receive priority processing and personalized
+            mailbox management services.
+        </p>
+
+    `;
+break;
+
+        case "businessmail":
+
+            content.innerHTML = `
+    <div style="
+        padding:15px;
+        border-radius:12px;
+        background:rgba(255,255,255,.05);
+        border:1px solid rgba(255,255,255,.08);
+    ">
+        <h3>Business Mailbox</h3>
+
+        <p>
+            Perfect for LLCs, corporations and remote businesses.
+        </p>
+    </div>
+`;
+    }
+
+    document
+        .getElementById("infoPanel")
+        .classList.add("active");
+}
+	</script>
+<script>
+const wall = document.getElementById("pmbWall");
+const vip = document.getElementById("vip");
+const ball = document.getElementById("xtubeBall");
+
+/* ---------------------------
+   600 PMB GENERATION
+----------------------------*/
+for(let i=1;i<=600;i++){
+
+    const div=document.createElement("div");
+
+    div.className="pmb";
+    div.dataset.id=i;
+    div.textContent=i;
+
+    if(Math.random()<0.08){
+        div.classList.add("active");
+    }
+
+    if(i===140){
+
+        setInterval(()=>{
+            div.textContent=
+            div.textContent==="140"
+                ?"YOU"
+                :"140";
+        },3000);
+
+    }
+
+    wall.appendChild(div);
+
+}
+	
+	const messages=[
+
+"⭐ VIP DELIVERY EN ROUTE",
+"📦 AMAZON PACKAGE RECEIVED",
+"📬 MAIL PROCESSED",
+"✈ INTERNATIONAL MAIL CLEARED",
+"🚚 USPS ARRIVING",
+"📮 PMB SYSTEM ONLINE"
+
+];
+
+let msg=0;
+
+function rotateStatus(){
+
+    gsap.to(vip,{
+
+        opacity:0,
+
+        duration:.35,
+
+        onComplete(){
+
+            vip.textContent=messages[msg];
+
+            msg=(msg+1)%messages.length;
+
+            gsap.to(vip,{
+                opacity:1,
+                duration:.35
+            });
+
+        }
+
+    });
+
+}
+
+rotateStatus();
+
+setInterval(rotateStatus,7000);
+	function ballRun(){
+
+    gsap.fromTo(ball,
+
+        {
+            x:-20
+        },
+
+        {
+
+            x:wall.offsetWidth,
+
+            duration:8,
+
+            ease:"none",
+
+            onComplete:ballRun
+
+        }
+
+    );
+
+}
+
+ballRun();
+const boxes=document.querySelectorAll(".pmb");
+
+gsap.ticker.add(()=>{
+
+    const x=ball.getBoundingClientRect().left;
+
+    boxes.forEach(box=>{
+
+        const r=box.getBoundingClientRect();
+
+        if(Math.abs(r.left-x)<6){
+
+            box.classList.add("active");
+
+            clearTimeout(box.timer);
+
+            box.timer=setTimeout(()=>{
+
+                box.classList.remove("active");
+
+            },700);
+
+        }
+
+    });
+
+});
+	setInterval(()=>{
+
+    const items=document.querySelectorAll(".pmb");
+
+    const r=items[Math.floor(Math.random()*items.length)];
+
+    r.classList.add("active");
+
+    setTimeout(()=>{
+
+        r.classList.remove("active");
+
+    },800);
+
+},300);
+	</script>
+</body>
+
+</html>
