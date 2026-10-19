@@ -1388,6 +1388,30 @@ body.matrix-mode::after {
   }
 }
 
+/* Only the TVZOV preview window */
+#job-previews .job-window.tvzov-window {
+  background: transparent;
+}
+
+/* Remove the dark backing layer behind the video */
+#job-previews .tvzov-window .job-window-content {
+  background: transparent;
+  backdrop-filter: none;
+}
+
+/* Let the Matrix page show through the video */
+#job-previews .tvzov-window #ufc-matrix-stream {
+  opacity: 0.5 !important;
+  mix-blend-mode: screen;
+  background: transparent !important;
+}
+
+/* Keep the title bar readable */
+#job-previews .tvzov-window .job-window-bar {
+  position: relative;
+  z-index: 3;
+}
+
 /* Let the Matrix page show through the stream */
 #ufc-matrix-stream {
   opacity: 0.5 !important;
@@ -1474,7 +1498,7 @@ body.matrix-mode::after {
   </section>
 
   <!-- WEBSITE 3 -->
-  <section class="job-window">
+  <section class="job-window tvzov-window">
     <div class="job-window-bar">
       <span class="job-dots">● ● ●</span>
       <a href="https://tvzov.com" target="_blank" rel="noopener">
