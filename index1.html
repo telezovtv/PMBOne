@@ -1473,12 +1473,20 @@ body.matrix-mode::after {
       </a>
     </div>
     <div class="job-window-content">
-      <iframe
-        src="https://tvzov.com"
-        title="TVZOV website preview"
-        loading="lazy"
-        referrerpolicy="no-referrer">
-      </iframe>
+      <video
+  id="ufc-matrix-stream"
+  autoplay
+  muted
+  playsinline
+  style="
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0.5;
+    display:block;
+    background:#020804;
+  ">
+</video>
       <a class="job-open" href="https://tvzov.com"
          target="_blank" rel="noopener">OPEN SITE ↗</a>
     </div>
@@ -2173,6 +2181,38 @@ panel.addEventListener("mouseleave", () => {
 })();
 	
 	</script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+(() => {
+  const video = document.getElementById("ufc-matrix-stream");
+  if (!video) return;
+
+  const stream =
+    "https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist.m3u8";
+
+  video.muted = true;
+  video.autoplay = true;
+  video.playsInline = true;
+
+  if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    video.src = stream;
+  } else if (window.Hls && Hls.isSupported()) {
+    const hls = new Hls({
+      enableWorker: true,
+      lowLatencyMode: false
+    });
+    hls.loadSource(stream);
+    hls.attachMedia(video);
+  } else {
+    console.warn("HLS playback is not supported in this browser.");
+    return;
+  }
+
+  video.play().catch(error => {
+    console.warn("Autoplay was blocked:", error);
+  });
+})();
+</script>	
 </body>
 
 </html>
