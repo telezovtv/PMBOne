@@ -421,6 +421,7 @@ body.matrix-mode::after {
 	width: 280px;
 	height: auto;
     transition: transform 0.3s ease; /* Smooth transition for the text movement */
+	z-index: 9999;
 
 }
 
@@ -445,6 +446,7 @@ body.matrix-mode::after {
 .hover-link:hover .original-text {
     /* Move the original text off-screen */
     transform: translateY(-100%);
+	z-index: 9999;
 }
 
 .hover-link:hover::after {
