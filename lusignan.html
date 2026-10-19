@@ -5,7 +5,7 @@
 <meta http-equiv="CONTENT-LANGUAGE" content="en-US" />
 <meta http-equiv="Cache-Control" content=" no-cache, pre-check=0, post-check=0"/>
 <meta http-equiv="Expires" content="0" />
-<meta http-equiv="Last-Modified" content="Monday,  29 June 2026"/>
+<meta http-equiv="Last-Modified" content="Sunday,  18 October 2026"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta name="distribution" content="global">
 <meta name="google" value="notranslate">
@@ -421,6 +421,7 @@ body.matrix-mode::after {
 	width: 280px;
 	height: auto;
     transition: transform 0.3s ease; /* Smooth transition for the text movement */
+	z-index: 9999;
 
 }
 
@@ -445,6 +446,7 @@ body.matrix-mode::after {
 .hover-link:hover .original-text {
     /* Move the original text off-screen */
     transform: translateY(-100%);
+	z-index: 9999;
 }
 
 .hover-link:hover::after {
@@ -461,6 +463,7 @@ body.matrix-mode::after {
 		  .container {
   display: flex;
 			    margin-top: 20px; /* Moves the container down by 20 pixels */
+			  z-index: 9999;
 }
 #fader {
     position: fixed;
@@ -1190,6 +1193,237 @@ body.matrix-mode::after {
   display: none;
 }
 
+/* ========================================
+   LUSIGNAN MATRIX — FLOATING JOB WINDOWS
+======================================== */
+
+#job-previews {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s ease, visibility .45s ease;
+  perspective: 1200px;
+}
+
+#job-previews.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#job-previews .job-window {
+  position: absolute;
+  width: clamp(220px, 27vw, 390px);
+  height: clamp(165px, 22vw, 255px);
+  overflow: hidden;
+  pointer-events: auto;
+  color: #00ff9c;
+  background: rgba(1, 8, 5, .96);
+  border: 1px solid rgba(0, 255, 156, .8);
+  border-radius: 7px;
+  box-shadow:
+    0 0 8px rgba(0,255,156,.45),
+    0 0 28px rgba(0,255,156,.16),
+    inset 0 0 18px rgba(0,255,156,.06);
+  backdrop-filter: blur(8px);
+  transition:
+    transform .4s ease,
+    box-shadow .4s ease,
+    border-color .4s ease;
+  animation: job-float 5s ease-in-out infinite;
+}
+
+#job-previews .job-window:hover {
+  z-index: 20;
+  transform: translateY(-7px) scale(1.035) !important;
+  border-color: #baffd9;
+  box-shadow:
+    0 0 12px #00ff9c,
+    0 0 35px rgba(0,255,156,.35);
+}
+
+.job-window:nth-child(1) {
+  top: 12%;
+  left: 3%;
+  transform: rotate(-3deg);
+}
+
+.job-window:nth-child(2) {
+  top: 9%;
+  right: 4%;
+  transform: rotate(2deg);
+  animation-delay: -1.4s;
+}
+
+.job-window:nth-child(3) {
+  top: 38%;
+  left: 35%;
+  transform: rotate(-1deg);
+  animation-delay: -2.2s;
+}
+
+.job-window:nth-child(4) {
+  bottom: 7%;
+  left: 9%;
+  transform: rotate(2deg);
+  animation-delay: -.8s;
+}
+
+.job-window:nth-child(5) {
+  bottom: 7%;
+  right: 9%;
+  transform: rotate(-2deg);
+  animation-delay: -3s;
+}
+
+.job-window-bar {
+  height: 31px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(0,255,156,.18),
+    rgba(0,0,0,.9)
+  );
+  border-bottom: 1px solid rgba(0,255,156,.4);
+  font: 11px "Courier New", monospace;
+  letter-spacing: 1px;
+}
+
+.job-dots {
+  color: #00ff9c;
+  letter-spacing: 2px;
+}
+
+.job-window-bar a {
+  color: #adffd7;
+  text-decoration: none;
+}
+
+.job-window-bar a:hover {
+  color: white;
+}
+
+.job-window-content {
+  position: relative;
+  height: calc(100% - 31px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%,
+      rgba(0,255,120,.12), transparent 70%),
+    #020604;
+}
+
+.job-window-content iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  background: #020604;
+}
+
+.job-open {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  color: #00ff9c;
+  background: rgba(0,0,0,.88);
+  border: 1px solid rgba(0,255,156,.5);
+  padding: 5px 8px;
+  font: 10px "Courier New", monospace;
+  text-decoration: none;
+}
+
+.job-open:hover {
+  color: white;
+  box-shadow: 0 0 12px #00ff9c;
+}
+
+.job-code {
+  padding: 13px;
+  font: 11px/1.8 "Courier New", monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #00ff9c;
+  text-shadow: 0 0 5px rgba(0,255,156,.35);
+}
+
+.job-code .cyan {
+  color: #66eaff;
+}
+
+.job-code .dim {
+  color: #4b9d76;
+}
+
+@keyframes job-float {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -8px; }
+}
+
+@media (max-width: 700px) {
+  #job-previews {
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  #job-previews .job-window {
+    position: relative;
+    inset: auto;
+    width: min(100%, 420px);
+    height: 190px;
+    margin: 12px auto;
+    transform: none;
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #job-previews *,
+  #job-previews {
+    animation: none !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Only the TVZOV preview window */
+#job-previews .job-window.tvzov-window {
+  background: transparent;
+}
+
+/* Remove the dark backing layer behind the video */
+#job-previews .tvzov-window .job-window-content {
+  background: transparent;
+  backdrop-filter: none;
+}
+
+/* Let the Matrix page show through the video */
+#job-previews .tvzov-window #ufc-matrix-stream {
+  opacity: 0.5 !important;
+  mix-blend-mode: screen;
+  background: transparent !important;
+}
+
+/* Keep the title bar readable */
+#job-previews .tvzov-window .job-window-bar {
+  position: relative;
+  z-index: 3;
+}
+
+/* Let the Matrix page show through the stream */
+#ufc-matrix-stream {
+  opacity: 0.5 !important;
+  mix-blend-mode: screen;
+  background: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
 </style>
 
 </head>
@@ -1222,6 +1456,122 @@ body.matrix-mode::after {
 </a>
 
 <a href="https://xtube.pw" class="hover-link" onclick="anchorHandler(event)"><span id="target-span" class="hidden-span">Click for it!</span></a></div>
+	
+<!-- LUSIGNAN MATRIX PORTFOLIO WINDOWS -->
+<div id="job-previews" aria-label="Portfolio previews">
+
+  <!-- WEBSITE 1 -->
+  <section class="job-window">
+    <div class="job-window-bar">
+      <span class="job-dots">● ● ●</span>
+      <a href="https://pmbone.com" target="_blank" rel="noopener">
+        PMBONE.COM ↗
+      </a>
+    </div>
+    <div class="job-window-content">
+      <iframe
+        src="https://pmbone.com"
+        title="PMBONE website preview"
+        loading="lazy"
+        referrerpolicy="no-referrer">
+      </iframe>
+      <a class="job-open" href="https://pmbone.com"
+         target="_blank" rel="noopener">OPEN SITE ↗</a>
+    </div>
+  </section>
+
+  <!-- WEBSITE 2 -->
+  <section class="job-window">
+    <div class="job-window-bar">
+      <span class="job-dots">● ● ●</span>
+      <a href="https://xtube.pw" target="_blank" rel="noopener">
+        XTUBE.PW ↗
+      </a>
+    </div>
+    <div class="job-window-content">
+      <iframe
+        src="https://xtube.pw"
+        title="XTUBE website preview"
+        loading="lazy"
+        referrerpolicy="no-referrer">
+      </iframe>
+      <a class="job-open" href="https://xtube.pw"
+         target="_blank" rel="noopener">OPEN SITE ↗</a>
+    </div>
+  </section>
+
+  <!-- WEBSITE 3 -->
+  <section class="job-window tvzov-window">
+    <div class="job-window-bar">
+      <span class="job-dots">● ● ●</span>
+      <a href="https://tvzov.com" target="_blank" rel="noopener">
+        TVZOV.COM ↗
+      </a>
+    </div>
+    <div class="job-window-content">
+      <video
+  id="ufc-matrix-stream"
+  autoplay
+  muted
+  playsinline
+  style="
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0.5;
+  display:block;
+  background:transparent;
+  mix-blend-mode:screen;
+  ">
+</video>
+      <a class="job-open" href="https://tvzov.com"
+         target="_blank" rel="noopener">OPEN SITE ↗</a>
+    </div>
+  </section>
+
+  <!-- CODE SAMPLE 1 -->
+  <section class="job-window">
+    <div class="job-window-bar">
+      <span class="job-dots">● ● ●</span>
+      <span>matrix.js — LIVE CODE</span>
+    </div>
+    <div class="job-window-content">
+      <div class="job-code">
+        <span class="dim">// SYSTEM INITIALIZED</span>
+        <br>const matrix = {
+        <br>&nbsp; <span class="cyan">design</span>: "custom",
+        <br>&nbsp; <span class="cyan">style</span>: "cyberpunk",
+        <br>&nbsp; animation: true,
+        <br>&nbsp; creativity: Infinity
+        <br>};
+        <br><br>matrix.<span class="cyan">execute</span>();
+        <br><span class="dim">// REALITY REDEFINED_</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CODE SAMPLE 2 -->
+  <section class="job-window">
+    <div class="job-window-bar">
+      <span class="job-dots">● ● ●</span>
+      <span>web-design.html — SOURCE</span>
+    </div>
+    <div class="job-window-content">
+      <div class="job-code">
+        <span class="dim">&lt;!-- CUSTOM WEB DESIGN --&gt;</span>
+        <br><span class="cyan">&lt;section</span> class="matrix"<span class="cyan">&gt;</span>
+        <br>&nbsp; &lt;h1&gt;LUSIGNAN&lt;/h1&gt;
+        <br>&nbsp; &lt;p&gt;Code. Design. Create.&lt;/p&gt;
+        <br><span class="cyan">&lt;/section&gt;</span>
+        <br><br><span class="dim">/* green glow activated */</span>
+        <br><span class="cyan">animation</span>: matrix-pulse;
+        <br><span class="dim">/* END OF TRANSMISSION_ */</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
 	<div id="fader">	  <div id="matrix" class="matrix"></div><div id="text-container" class="scramble">THE MATRIX KEY CODE ONCLICK</div>
 	<div class="image-container">
     <img class="img-default" src="/img/code_3.png" alt="Default Image">
@@ -1826,7 +2176,108 @@ panel.addEventListener("mouseleave", () => {
   panel.classList.remove("active");
 });
 </script>
+<script>
 
+(function () {
+  const trigger = document.getElementById("toggle-link");
+  const previews = document.getElementById("job-previews");
+
+  if (!trigger || !previews) return;
+
+  let closeTimer;
+
+  function showPreviews() {
+    clearTimeout(closeTimer);
+    previews.classList.add("is-visible");
+  }
+
+  function scheduleClose() {
+    clearTimeout(closeTimer);
+
+    closeTimer = setTimeout(() => {
+      previews.classList.remove("is-visible");
+    }, 350);
+  }
+
+  trigger.addEventListener("mouseenter", showPreviews);
+  trigger.addEventListener("mouseleave", scheduleClose);
+
+  previews.addEventListener("mouseenter", showPreviews);
+  previews.addEventListener("mouseleave", scheduleClose);
+
+  trigger.addEventListener("focus", showPreviews);
+  trigger.addEventListener("blur", scheduleClose);
+
+  // Touch devices: tap "all my jobs" to toggle previews.
+  trigger.addEventListener("click", function () {
+    if (window.matchMedia("(hover: none)").matches) {
+      clearTimeout(closeTimer);
+      previews.classList.toggle("is-visible");
+    }
+  });
+})();
+	
+	</script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+
+(() => {
+  const video = document.getElementById("ufc-matrix-stream");
+  if (!video) return;
+
+  const streams = [
+    "https://amg12058-c15studio-amg12058c1-lg-us-5787.playouts.now.amagi.tv/playlist.m3u8",
+    "https://linear-893.frequency.stream/dist/xumo/893/hls/master/playlist.m3u8"
+  ];
+
+  let currentStream = 0;
+  let hls = null;
+
+  video.muted = true;
+  video.autoplay = true;
+  video.playsInline = true;
+
+  function loadStream(index) {
+    const stream = streams[index];
+
+    if (hls) {
+      hls.destroy();
+      hls = null;
+    }
+
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = stream;
+      video.load();
+    } else if (window.Hls && Hls.isSupported()) {
+      hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: false
+      });
+
+      hls.loadSource(stream);
+      hls.attachMedia(video);
+    } else {
+      console.warn("HLS playback is not supported in this browser.");
+      return;
+    }
+
+    video.play().catch(error => {
+      console.warn("Autoplay was blocked:", error);
+    });
+  }
+
+  // Start with stream 1.
+  loadStream(currentStream);
+
+  // Switch streams every 60 seconds.
+  setInterval(() => {
+    currentStream = (currentStream + 1) % streams.length;
+    loadStream(currentStream);
+    console.log("Matrix stream switched to:", currentStream + 1);
+  }, 60000);
+})();
+
+</script>	
 </body>
 
 </html>
